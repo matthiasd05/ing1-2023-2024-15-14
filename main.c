@@ -21,10 +21,14 @@ char mur = 0xB;
 char balle = 0xF;
 
 void plateau(){
-    int balleX = rand()%LONGUEUR-1;
-    int balleY = rand()%LARGEUR-1;
     int mur0X =rand()%LONGUEUR-1;
     int mur0Y= rand()%LARGEUR-1;
+    int mur1X =rand()%LONGUEUR-1;
+    int mur1Y= rand()%LARGEUR-1;
+    int mur2X =rand()%LONGUEUR-1;
+    int mur2Y= rand()%LARGEUR-1;
+    int balleX = rand()%LONGUEUR-1;
+    int balleY = rand()%LARGEUR-1;
     int background=2 ;
     HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(H,background*16);
@@ -52,14 +56,19 @@ void plateau(){
             else if(mur0X==i && j== mur0Y){
                 printf("|%c|",mur);
             }
+            else if(mur1X==i && j== mur1Y){
+                printf("|%c|",mur);
+            }
+            else if(mur2X==i && j== mur2Y){
+                printf("|%c|",mur);
+            }
             else{
                 printf("| |");
             }
         }
         printf("\n");
     }
-    balleX=(balleX+1)%LONGUEUR-1;
-    balleY=(balleY+1)%LARGEUR-1;
+
 }
 
 
