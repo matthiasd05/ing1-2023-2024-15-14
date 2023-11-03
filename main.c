@@ -5,6 +5,9 @@
 #include <windows.h>
 #define LONGUEUR 10
 #define LARGEUR 20
+/*
+ * On définit tout d'abord les coordonnées de snoopy (au départ) et celles des oiseaux qui seront à chaque angle du plateau.
+ */
 int snoopyX=LONGUEUR-1;
 int snoopyY=LARGEUR/2;
 char snoopy=0xC;
@@ -19,8 +22,14 @@ int oiseau4Y=LARGEUR-1;
 char oiseau = 0x6;
 char mur = 0xB;
 char balle = 0xF;
-
+/*
+ * On définit le tableau de jeu qui est un tableau de 10 par 20
+ */
 void plateau(){
+
+    /*
+     * On a décidé de placer la balle ainsi que les murs de manière aléatoire donc on utilise rand()
+     */
     int mur0X =rand()%LONGUEUR-1;
     int mur0Y= rand()%LARGEUR-1;
     int mur1X =rand()%LONGUEUR-1;
@@ -29,9 +38,15 @@ void plateau(){
     int mur2Y= rand()%LARGEUR-1;
     int balleX = rand()%LONGUEUR-1;
     int balleY = rand()%LARGEUR-1;
+    /*
+     * On définit un fond vert afin d'avoir un plateau de jeu plus agréable et plus esthétique
+     */
     int background=2 ;
     HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(H,background*16);
+    /*
+     * On associe nos éléments (snoopy, oiseaux, murs, balle) à des cases composants le tableau pour les intégrer au tableau ou sinon laisser un espace
+     */
     for (int i = 0; i < LONGUEUR; ++i) {
         for (int j = 0; j <LARGEUR ; ++j) {
 
@@ -71,7 +86,9 @@ void plateau(){
 
 }
 
-
+/*
+ * La fonction permet d'indiquer si la position de snoopy est la même que celle des oiseaux et donc indique qu'il a réussi en récupérer un
+ */
 char trouver(){
     int nboiseaux;
         if(oiseau1X== snoopyX && oiseau1Y== snoopyY){
@@ -96,15 +113,23 @@ char trouver(){
     }
 
 }
+
+/*
+ * La fonction va permettre de sauvegarder la partie en cours dans un fichier
+ */
 void sauvegarde(){
+    /*
+     * On va créer un tableau pouvant contenir jusqu'à 50 caractères qui va représenter le nom du fichier créé en 1s
+     */
     char nomFichier[50];
     printf("Entrez le nom du fichier de sauvegarde : ");
     scanf("%s", nomFichier);
-    Sleep(500);
+    Sleep(1000);
+    /*On va déclarer vers une structure FILE ce qui va nous permettre de pouvoir réaliser des opérations sur nos fichiers puis on on ouvre (ici on le crée)et on le lit (w= write)*/
     FILE *fichier;
     fichier = fopen(nomFichier, "w");
 
-    // Écriture des positions actuelles des éléments dans le fichier
+    // Cela va donc écrire les positions actuelles des éléments dans le fichier puis le fermer
     fprintf(fichier, "Snoopy : (%d, %d)\n", snoopyX, snoopyY);
     fprintf(fichier, "Oiseau1 : (%d, %d)\n", oiseau1X, oiseau1Y);
     fprintf(fichier, "Oiseau2 : (%d, %d)\n", oiseau2X, oiseau2Y);
@@ -116,6 +141,10 @@ void sauvegarde(){
     printf("Partie sauvegardee dans le fichier : %s\n", nomFichier);
 
 }
+
+/*
+ * Cette fonction va nous permettre de charger la partie sauvegardée par la fonction d'avant. Elle utilise la même logique sauf que là nous sommes en mode r(read), on va donc ressortir les éléments sauvegardés dans le fichier
+ * */
 
 void chargerPartie(const char *nomFichier) {
     FILE *fichier = fopen(nomFichier, "r");
@@ -145,8 +174,10 @@ void chargerPartie(const char *nomFichier) {
     oiseau4X = o4X;
     oiseau4Y = o4Y;
 
-    printf("Partie chargée depuis le fichier : %s\n", nomFichier);
 }
+/*
+ * Cette fonction va permettre de déplacer snoopy en le déplaçant dans le tableau selon les touches du clavier ou de sauvegarder en faisant appel à la fonction créée pour cela plus haut
+ */
 
 char touches(char commande){
         switch (commande) {
@@ -188,31 +219,37 @@ void timer(){
     HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(H,background*16);
     for (int i = 0; i < LARGEUR; ++i) {
-        printf("%c",0x4);
+        printf(" %c ",0x4);
     }
-    Sleep(1000);
     temps--;
     if(temps%6 == 0 && temps<120){
-        for (int i = temps; i <LARGEUR ;++i) {
+        for (int i = temps; i <LONGUEUR ;++i) {
             printf("  ");
         }
     }
 }
-
-void boucle(){
+/*
+ * La fonction permet d'utiliser toutes les fonctions au-dessus et ce en boucle grâce à une boucle while
+ */
+char boucle(){
     while (1) {
         plateau();
         timer();
         printf("\n");
         trouver();
-        if (_kbhit()) {
-            char commande = _getch();
+        //Cette fonction détecte si l'on a appuyé sur une touche ce qui est important pour les déplacements ou la sauvegarde
+        char commande = _getch();
+        if(commande == 's'){
             touches(commande);
+            return 0;
         }
+        touches(commande);
         Sleep(2000);
+
     }
 }
 
+//On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
     int choix;
     printf("BIENVENUE DANS L'EXPEREIENCE SNOOPY!!!\n\n");
@@ -247,10 +284,7 @@ void menu(){
         }
         case 2:{
             boucle();
-            if (_kbhit()) {
-                char commande = _getch();
-                touches(commande);
-            }
+            system("cls");
             break;
 
         }
