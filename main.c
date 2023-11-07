@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
-#include <unistd.h>
 #define Longueur 10
 #define Largeur 20
-
 char Plateau[Longueur][Largeur];
 int SnoopyX;
 int SnoopyY;
@@ -14,10 +12,10 @@ int murX;
 int murY;
 int oiseauX;
 int oiseauY;
-int test_oiseau=0;
-int test_oiseau1=0;
-int test_oiseau2=0;
-int test_oiseau3=0;
+int test_oiseau;
+int test_oiseau1;
+int test_oiseau2;
+int test_oiseau3;
 int oiseau1X;
 int oiseau1Y;
 int oiseau2X;
@@ -25,6 +23,7 @@ int oiseau2Y;
 int oiseau3X;
 int oiseau3Y;
 int compteur;
+
 void plateau(){
     FILE *fichier;
     fichier= fopen("niveau1.txt","r");
@@ -100,9 +99,9 @@ void plateau(){
         fgets(texte,Longueur,fichier);
         printf("\n");
     }
+    fclose(fichier);
 
 }
-
 void sauvegarde(){
     /*
      * On va créer un tableau pouvant contenir jusqu'à 50 caractères qui va représenter le nom du fichier créé en 1s
@@ -112,17 +111,17 @@ void sauvegarde(){
     scanf("%s", nomFichier);
     Sleep(1000);
     /*On va déclarer vers une structure FILE ce qui va nous permettre de pouvoir réaliser des opérations sur nos fichiers puis on on ouvre (ici on le crée)et on le lit (w= write)*/
-    FILE *fichier;
-    fichier = fopen(nomFichier, "w");
+    FILE *fichier_sauvegarde;
+    fichier_sauvegarde = fopen(nomFichier, "w");
 
     // Cela va donc écrire les positions actuelles des éléments dans le fichier puis le fermer
-    fprintf(fichier, "Snoopy : (%d, %d)\n", SnoopyX, SnoopyY);
-    fprintf(fichier, "Oiseau1 : (%d, %d)\n", oiseauX, oiseauY);
-    fprintf(fichier, "Oiseau2 : (%d, %d)\n", oiseau1X, oiseau1Y);
-    fprintf(fichier, "Oiseau3 : (%d, %d)\n", oiseau2X, oiseau2Y);
-    fprintf(fichier, "Oiseau3 : (%d, %d)\n", oiseau3X, oiseau3Y);
+    fprintf(fichier_sauvegarde, "Snoopy : (%d, %d)\n", SnoopyX, SnoopyY);
+    fprintf(fichier_sauvegarde, "Oiseau1 : (%d, %d)\n", oiseauX, oiseauY);
+    fprintf(fichier_sauvegarde, "Oiseau2 : (%d, %d)\n", oiseau1X, oiseau1Y);
+    fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau2X, oiseau2Y);
+    fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau3X, oiseau3Y);
 
-    fclose(fichier);
+    fclose(fichier_sauvegarde);
 
     printf("Partie sauvegardee dans le fichier : %s\n", nomFichier);
 
@@ -133,23 +132,23 @@ void sauvegarde(){
  * */
 
 void chargerPartie(const char *nomFichier) {
-    FILE *fichier = fopen(nomFichier, "r");
+    FILE *fichier_charge = fopen(nomFichier, "r");
 
     // Variables pour stocker les données lues depuis le fichier
     int sX, sY, bX, bY, mX, mY,oX, oY, o1X, o1Y, o2X, o2Y, o3X, o3Y;
 
     // Lire les données du fichier pour restaurer l'état du jeu
-    fscanf(fichier, "Snoopy : (%d, %d)\n", &sX, &sY);
-    fscanf(fichier, "Balle : (%d, %d)\n", &bX, &bY);
-    fscanf(fichier, "Mur : (%d, %d)\n", &mX, &mY);
-    fscanf(fichier, "Oiseau1 : (%d, %d)\n", &oX, &oY);
-    fscanf(fichier, "Oiseau2 : (%d, %d)\n", &o1X, &o1Y);
-    fscanf(fichier, "Oiseau3 : (%d, %d)\n", &o2X, &o2Y);
-    fscanf(fichier, "Oiseau4 : (%d, %d)\n", &o3X, &o3Y);
+    fscanf(fichier_charge, "Snoopy : (%d, %d)\n", &sX, &sY);
+    fscanf(fichier_charge, "Balle : (%d, %d)\n", &bX, &bY);
+    fscanf(fichier_charge, "Mur : (%d, %d)\n", &mX, &mY);
+    fscanf(fichier_charge, "Oiseau1 : (%d, %d)\n", &oX, &oY);
+    fscanf(fichier_charge, "Oiseau2 : (%d, %d)\n", &o1X, &o1Y);
+    fscanf(fichier_charge, "Oiseau3 : (%d, %d)\n", &o2X, &o2Y);
+    fscanf(fichier_charge, "Oiseau4 : (%d, %d)\n", &o3X, &o3Y);
 
 
     // Fermer le fichier après avoir lu les données
-    fclose(fichier);
+    fclose(fichier_charge);
 
     // Restaurer les valeurs pour la partie en cours
     SnoopyX = sX;
@@ -177,10 +176,6 @@ void chargerPartie(const char *nomFichier) {
 
 
 }
-
-void pause(){
-    //définir pause ici : 
-};
 
 void touches(char commande){
     switch (commande) {
@@ -223,21 +218,12 @@ void touches(char commande){
 }
 }
 void oiseau(){
-    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY]){
-        printf("Vous avez un oiseau");
-        compteur++;
-    }
-    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau1X][oiseau1Y]){
-        printf("Vous avez un oiseau");
-        compteur++;
-    }
-    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau2X][oiseau2Y]){
-        printf("Vous avez un oiseau");
-        compteur++;
-    }
-    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau3X][oiseau3Y]){
-        printf("Vous avez un oiseau");
-        compteur++;
+    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY]||
+       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau1X][oiseau1Y] ||
+       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau2X][oiseau2Y] ||
+       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau3X][oiseau3Y]){
+            printf("Vous avez un oiseau");
+            compteur++;
     }
 }
 void affichage(){
@@ -249,14 +235,58 @@ void affichage(){
     }
 
 }
-void balle(){
+void mur(){
+    int droit_bouger;
+    if(Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
+        Plateau[murX][murY]=' ' ;
+        murY++;
+        Plateau[murX][murY]= 'M';
+        droit_bouger++;
+    }
+    else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
+        Plateau[murX][murY]=' ' ;
+        murY--;
+        Plateau[murX][murY]= 'M';
+        droit_bouger++;
+    }
+    else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
+        Plateau[murX][murY]=' ' ;
+        murX++;
+        Plateau[murX][murY]= 'M';
+        droit_bouger++;
+    }
+    else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
+        Plateau[murX][murY]=' ' ;
+        murX--;
+        Plateau[murX][murY]= 'M';
+        droit_bouger++;
+    }
 
 }
+void balle(){
+    Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
+
+    // Déplacement de la balle
+    if(balleX == 0 || balleX == Longueur - 1){
+        balleX = (balleX == 0) ? 1 : Longueur - 2; // Inverser la direction sur les bords verticaux
+    } else if(balleY == 0 || balleY == Largeur - 1){
+        balleY = (balleY == 0) ? 1 : Largeur - 2; // Inverser la direction sur les bords horizontaux
+    } else {
+        // Mettre à jour la position en fonction de la direction de la balle (exemple: vers le bas et la droite)
+        balleX++;
+        balleY++;
+    }
+
+    Plateau[balleX][balleY] = 'B';
+}
+
 void boucle(){
     plateau();
     while (1){
         affichage();
         oiseau();
+        balle();
+        mur();
         char commande = _getch();
         if(commande == 's'){
             touches(commande);
@@ -264,33 +294,6 @@ void boucle(){
         touches(commande);
     }
 }
-
-// TIMER EN COURS
-
-void timer() {
-    int nombreDePoints = 120;
-
-    while (nombreDePoints > 0) {
-        for (int i = 0; i < nombreDePoints; i++) {
-            printf(".");
-        }
-
-        printf("\n");
-
-        sleep(1); // Pause d'une seconde
-
-        nombreDePoints--;
-
-        for (int i = 0; i < 120; i++) {
-            printf(" ");
-        }
-        printf("\r");
-    }
-
-    return;
-}
-
-// FIN TIMER EN COURS
 
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
@@ -326,19 +329,27 @@ void menu(){
             break;
         }
         case 2:{
-            plateau();
-            while (1){
-                affichage();
-                oiseau();
-                char commande = _getch();
-                if(commande == 's'){
+                plateau();
+                while (1){
+                    affichage();
+                    oiseau();
+                    balle();
+                    mur();
+                    char commande = _getch();
+                    if(commande == 's'){
+                        touches(commande);
+                        menu();
+                    }
                     touches(commande);
-                    menu();
+                    if (compteur == 4) {
+                        printf("Le niveau est fini");
+                        Sleep(1000);
+                        menu();
                 }
-                touches(commande);
-            }
 
+            }
         }
+
         case 3:{
             char nomFichier[50];
             printf("Entrez le nom du fichier de sauvegarde à charger : ");
@@ -376,7 +387,7 @@ void menu(){
             printf("Vous avez fini");
             break;
         }
-    }
+}
 }
 int main() {
     menu();
