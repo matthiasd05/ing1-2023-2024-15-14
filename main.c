@@ -177,6 +177,10 @@ void chargerPartie(const char *nomFichier) {
 
 }
 
+void pause(){
+    //définir pause ici : 
+};
+
 void touches(char commande){
     switch (commande) {
         case 'r':{
