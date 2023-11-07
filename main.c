@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
+#include <unistd.h>
 #define Longueur 10
 #define Largeur 20
 
@@ -263,6 +264,33 @@ void boucle(){
         touches(commande);
     }
 }
+
+// TIMER EN COURS
+
+void timer() {
+    int nombreDePoints = 120;
+
+    while (nombreDePoints > 0) {
+        for (int i = 0; i < nombreDePoints; i++) {
+            printf(".");
+        }
+
+        printf("\n");
+
+        sleep(1); // Pause d'une seconde
+
+        nombreDePoints--;
+
+        for (int i = 0; i < 120; i++) {
+            printf(" ");
+        }
+        printf("\r");
+    }
+
+    return;
+}
+
+// FIN TIMER EN COURS
 
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
