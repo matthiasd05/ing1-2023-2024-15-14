@@ -10,6 +10,8 @@ int balleX;
 int balleY;
 int murX;
 int murY;
+int murCX;
+int mur CY;
 int oiseauX;
 int oiseauY;
 int test_oiseau;
@@ -264,8 +266,46 @@ void mur(){
             droit_bouger=1;
         }
     }
-
 }
+
+void murCassable(){
+    static int droit_casser=0;
+    if(droit_casser==0){
+        if(Plateau[SnoopyX][SnoopyY+1]==Plateau[murCX][murCY] && droit_casser==0){
+            //Plateau[murX][murY]=' ' ;
+            char commande = _getch();
+            if(commande == 'b'){
+                Plateau[murCX][murCY]= ' ';
+                droit_casser=1;
+            }
+        }
+        else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[murCX][murCY] && droit_casser==0){
+            Plateau[murCX][murCY]=' ' ;
+            char commande = _getch();
+            if(commande == 'b'){
+                Plateau[murCX][murCY]= ' ';
+                droit_casser=1;
+            }
+        }
+        else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[murCX][murCY] && droit_casser==0){
+            Plateau[murCX][murCY]=' ' ;
+            char commande = _getch();
+            if(commande == 'b'){
+                Plateau[murCX][murCY]= ' ';
+                droit_casser=1;
+            }
+        }
+        else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[murCX][murCY] && droit_casser==0){
+            Plateau[murCX][murCY]=' ' ;
+            char commande = _getch();
+            if(commande == 'b'){
+                Plateau[murCX][murCY]= ' ';
+                droit_casser=1;
+            }
+        }
+    }
+}
+
 void balle(){
     while(Plateau[balleX][balleY]!= Plateau[SnoopyX][SnoopyY]){
         for (int i = 0; i <=7 ; ++i) {
