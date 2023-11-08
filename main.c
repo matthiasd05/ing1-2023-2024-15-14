@@ -23,7 +23,6 @@ int oiseau2Y;
 int oiseau3X;
 int oiseau3Y;
 int compteur;
-
 void plateau(){
     FILE *fichier;
     fichier= fopen("niveau1.txt","r");
@@ -236,48 +235,65 @@ void affichage(){
 
 }
 void mur(){
-    int droit_bouger;
-    if(Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
-        Plateau[murX][murY]=' ' ;
-        murY++;
-        Plateau[murX][murY]= 'M';
-        droit_bouger++;
-    }
-    else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
-        Plateau[murX][murY]=' ' ;
-        murY--;
-        Plateau[murX][murY]= 'M';
-        droit_bouger++;
-    }
-    else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
-        Plateau[murX][murY]=' ' ;
-        murX++;
-        Plateau[murX][murY]= 'M';
-        droit_bouger++;
-    }
-    else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
-        Plateau[murX][murY]=' ' ;
-        murX--;
-        Plateau[murX][murY]= 'M';
-        droit_bouger++;
+    static int droit_bouger=0;
+    if(droit_bouger==0){
+        if(Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY] && droit_bouger==0){
+            Plateau[murX][murY]=' ' ;
+            murY++;
+            Plateau[murX][murY]= 'M';
+            droit_bouger=1;
+
+        }
+        else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY] && droit_bouger==0){
+            Plateau[murX][murY]=' ' ;
+            murY--;
+            Plateau[murX][murY]= 'M';
+            droit_bouger=1;
+
+        }
+        else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY] && droit_bouger==0){
+            Plateau[murX][murY]=' ' ;
+            murX++;
+            Plateau[murX][murY]= 'M';
+            droit_bouger=1;
+        }
+        else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY] && droit_bouger==0){
+            Plateau[murX][murY]=' ' ;
+            murX--;
+            Plateau[murX][murY]= 'M';
+            droit_bouger=1;
+        }
     }
 
 }
 void balle(){
-    Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
-
-    // Déplacement de la balle
-    if(balleX == 0 || balleX == Longueur - 1){
-        balleX = (balleX == 0) ? 1 : Longueur - 2; // Inverser la direction sur les bords verticaux
-    } else if(balleY == 0 || balleY == Largeur - 1){
-        balleY = (balleY == 0) ? 1 : Largeur - 2; // Inverser la direction sur les bords horizontaux
-    } else {
-        // Mettre à jour la position en fonction de la direction de la balle (exemple: vers le bas et la droite)
-        balleX++;
-        balleY++;
+    while(Plateau[balleX][balleY]!= Plateau[SnoopyX][SnoopyY]){
+        for (int i = 0; i <=7 ; ++i) {
+            Plateau[balleX][balleY]=' ';
+            balleX++;
+            balleY++;
+            Plateau[balleX][balleY]='B';
+        }
+        for (int i = 0; i <=4 ; ++i) {
+            Plateau[balleX][balleY]=' ';
+            balleX--;
+            balleY++;
+            Plateau[balleX][balleY]='B';
+        }
+        for (int i = 0; i <=3 ; ++i) {
+            Plateau[balleX][balleY]=' ';
+            balleX--;
+            balleY--;
+            Plateau[balleX][balleY]='B';
+        }
+        for (int i = 0; i <=5; ++i) {
+            Plateau[balleX][balleY]=' ';
+            balleX++;
+            balleY--;
+            Plateau[balleX][balleY]='B';
+        }
     }
 
-    Plateau[balleX][balleY] = 'B';
 }
 
 void boucle(){
@@ -285,7 +301,7 @@ void boucle(){
     while (1){
         affichage();
         oiseau();
-        balle();
+
         mur();
         char commande = _getch();
         if(commande == 's'){
@@ -333,7 +349,6 @@ void menu(){
                 while (1){
                     affichage();
                     oiseau();
-                    balle();
                     mur();
                     char commande = _getch();
                     if(commande == 's'){
