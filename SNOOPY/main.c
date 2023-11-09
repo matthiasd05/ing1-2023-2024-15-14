@@ -1,28 +1,24 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
 #define Longueur 10
 #define Largeur 20
 char Plateau[Longueur][Largeur];
-int SnoopyX;
-int SnoopyY;
-int balleX;
-int balleY;
-int murX;
-int murY;
-int oiseauX;
-int oiseauY;
-int test_oiseau;
-int test_oiseau1;
-int test_oiseau2;
-int test_oiseau3;
-int oiseau1X;
-int oiseau1Y;
-int oiseau2X;
-int oiseau2Y;
-int oiseau3X;
-int oiseau3Y;
+int SnoopyX,SnoopyY;
+int balleX,balleY;
+int murX,murY;
+int temps=120;
+int mur_cassableX,mur_cassableY;
+int mur_piegeX,mur_piegeY;
+int oiseauX,oiseauY,oiseau1X,oiseau1Y,oiseau2X,oiseau2Y,oiseau3X,oiseau3Y,test_oiseau,test_oiseau1,test_oiseau2,test_oiseau3;
 int compteur;
+int droit_pousser;
+int droit_casser;
+int droit_bouger=1;
+int droit_chronometrer=1;
+int vie = 3;
+char coeur= '$';
 void plateau(){
     FILE *fichier;
     fichier= fopen("niveau1.txt","r");
@@ -88,6 +84,20 @@ void plateau(){
                     printf("%c",Plateau[i][j]);
 
                 }
+                else if(caractere_lu=='C'){
+                    mur_cassableX = i;
+                    mur_cassableY = j;
+                    Plateau[i][j]='C';
+                    printf("%c",Plateau[i][j]);
+
+                }
+                else if(caractere_lu=='X'){
+                    mur_piegeX = i;
+                    mur_piegeY = j;
+                    Plateau[i][j]='X';
+                    printf("%c",Plateau[i][j]);
+
+                }
                 else if(caractere_lu== ' '){
                     Plateau[i][j] = ' ';
                     printf("%c",Plateau[i][j]);
@@ -99,7 +109,53 @@ void plateau(){
         printf("\n");
     }
     fclose(fichier);
+}
+int temps_ecoule;
+int temps_restant =120;
+void chrono(){
+    if(temps_ecoule<120){
+        while(droit_bouger==1){
+            Sleep(1000);
+            temps_ecoule++;
+        }
+    }
+    temps_restant=120-temps_ecoule;
+    printf("Temps restant: %d",temps_restant);
 
+}
+
+void barre_vie(){
+    for (int i = 0; i <vie; ++i) {
+        printf("%c",coeur);
+    }
+    printf("\n");
+    if(Plateau[balleX][balleY]==Plateau[SnoopyX][SnoopyY] || temps_restant==0){
+        vie--;
+    }
+    else if(Plateau[SnoopyX][SnoopyY]==Plateau[mur_piegeX][mur_piegeY]){
+        vie= vie-3;
+    }
+}
+void scores(){
+    while(temps_ecoule<120){
+        if(droit_chronometrer==1){
+            Sleep(1000);
+            temps_ecoule++;
+            temps_restant=120-temps_ecoule;
+        }
+    }
+    printf("Votre score est de : %d",temps_restant*100);
+}
+void affichage(){
+    for (int i = 0; i < Longueur; ++i) {
+        for (int j = 0; j < Largeur; ++j) {
+            printf("%c", Plateau[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    printf("Nombre de vies : ");
+    barre_vie();
 }
 void sauvegarde(){
     /*
@@ -118,7 +174,7 @@ void sauvegarde(){
     fprintf(fichier_sauvegarde, "Oiseau1 : (%d, %d)\n", oiseauX, oiseauY);
     fprintf(fichier_sauvegarde, "Oiseau2 : (%d, %d)\n", oiseau1X, oiseau1Y);
     fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau2X, oiseau2Y);
-    fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau3X, oiseau3Y);
+    fprintf(fichier_sauvegarde, "Oiseau4 : (%d, %d)\n", oiseau3X, oiseau3Y);
 
     fclose(fichier_sauvegarde);
 
@@ -132,7 +188,7 @@ void sauvegarde(){
 
 void chargerPartie(const char *nomFichier) {
     FILE *fichier_charge = fopen(nomFichier, "r");
-
+    FILE  *fichier = fopen("NIVEAU1.txt","r");
     // Variables pour stocker les données lues depuis le fichier
     int sX, sY, bX, bY, mX, mY,oX, oY, o1X, o1Y, o2X, o2Y, o3X, o3Y;
 
@@ -176,64 +232,23 @@ void chargerPartie(const char *nomFichier) {
 
 }
 
-void touches(char commande){
-    switch (commande) {
-        case 'r':{
-            if( SnoopyX-1>0){
-                Plateau[SnoopyX][SnoopyY] = ' ';
-                SnoopyX--;
-                Plateau[SnoopyX][SnoopyY] = 'S';
-            }
-            break;
+void murCassable(){
+    if(droit_casser==1){
+        if(Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
+            Plateau[mur_cassableX][mur_cassableY]=' ';
         }
-        case 'f':{
-            if(SnoopyX+1<Longueur-1){
-                Plateau[SnoopyX][SnoopyY] = ' ';
-                SnoopyX++;
-                Plateau[SnoopyX][SnoopyY] = 'S';
-            }
-            break;
+        else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
+            Plateau[mur_cassableX][mur_cassableY]=' ';
         }
-        case 'd':{
-            if(SnoopyY-1>0){
-                Plateau[SnoopyX][SnoopyY] = ' ';
-                SnoopyY--;
-                Plateau[SnoopyX][SnoopyY] = 'S';
-            }
-            break;
+        else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+            Plateau[mur_cassableX][mur_cassableY]=' ';
         }
-        case 'g':{
-            if(SnoopyY+1<Largeur-1){
-                Plateau[SnoopyX][SnoopyY] = ' ';
-                SnoopyY++;
-                Plateau[SnoopyX][SnoopyY] = 'S';
-            }
-            break;
+        else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+            Plateau[mur_cassableX][mur_cassableY]=' ';
+        }
     }
-        case 's':{
-            sauvegarde();
-            break;
-        }
-}
-}
-void oiseau(){
-    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY]||
-       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau1X][oiseau1Y] ||
-       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau2X][oiseau2Y] ||
-       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau3X][oiseau3Y]){
-            printf("Vous avez un oiseau");
-            compteur++;
-    }
-}
-void affichage(){
-    for (int i = 0; i < Longueur; ++i) {
-        for (int j = 0; j < Largeur; ++j) {
-            printf("%c", Plateau[i][j]);
-        }
-        printf("\n");
     }
 
-}
 void mur(){
     static int droit_bouger=0;
     if(droit_bouger==0){
@@ -242,56 +257,163 @@ void mur(){
             murY++;
             Plateau[murX][murY]= 'M';
             droit_bouger=1;
-
+            droit_pousser=1;
         }
         else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY] && droit_bouger==0){
             Plateau[murX][murY]=' ' ;
             murY--;
             Plateau[murX][murY]= 'M';
             droit_bouger=1;
-
+            droit_pousser=1;
         }
         else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY] && droit_bouger==0){
             Plateau[murX][murY]=' ' ;
             murX++;
             Plateau[murX][murY]= 'M';
             droit_bouger=1;
+            droit_pousser=1;
         }
         else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY] && droit_bouger==0){
             Plateau[murX][murY]=' ' ;
             murX--;
             Plateau[murX][murY]= 'M';
             droit_bouger=1;
+            droit_pousser=1;
         }
     }
 
 }
+void touches(char commande){
+    switch (commande) {
+        case 'r':{
+            if( SnoopyX-1>0){
+                if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else{
+                    Plateau[SnoopyX][SnoopyY] = ' ';
+                    SnoopyX--;
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+            }
+
+            break;
+        }
+        case 'f':{
+            if(SnoopyX+1<Longueur-1){
+                if((droit_pousser>=1 || droit_casser==0)&&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else{
+                    Plateau[SnoopyX][SnoopyY] = ' ';
+                    SnoopyX++;
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+            }
+            break;
+        }
+        case 'd':{
+            if(SnoopyY-1>0){
+                if((droit_pousser>=1 || droit_casser==0) && Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else{
+                    Plateau[SnoopyX][SnoopyY] = ' ';
+                    SnoopyY--;
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+
+            }
+            break;
+        }
+        case 'g':{
+            if(SnoopyY+1<Largeur-1){
+                if((droit_pousser>=1 || droit_casser==0) && Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+                else{
+                    Plateau[SnoopyX][SnoopyY] = ' ';
+                    SnoopyY++;
+                    Plateau[SnoopyX][SnoopyY] = 'S';
+                }
+
+            }
+            break;
+    }
+        case 's':{
+            sauvegarde();
+            break;
+        }
+        case'p':{
+            droit_chronometrer=0;
+            chrono();
+            char reprendre =_getch();
+            if(reprendre=='p'){
+                droit_bouger = 1;
+            }
+            break;
+        }
+        case'b':{
+            droit_casser=1;
+            murCassable();
+            break;
+        }
+
+}
+}
+void oiseau(){
+    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY]||
+       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau1X][oiseau1Y] ||
+       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau2X][oiseau2Y] ||
+       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau3X][oiseau3Y]){
+            printf("Vous avez un oiseau\n");
+            compteur++;
+    }
+}
+int decalage_1,decalage_2,decalage_3,decalage_4;
 void balle(){
-    while(Plateau[balleX][balleY]!= Plateau[SnoopyX][SnoopyY]){
-        for (int i = 0; i <=7 ; ++i) {
-            Plateau[balleX][balleY]=' ';
-            balleX++;
-            balleY++;
-            Plateau[balleX][balleY]='B';
-        }
-        for (int i = 0; i <=4 ; ++i) {
-            Plateau[balleX][balleY]=' ';
-            balleX--;
-            balleY++;
-            Plateau[balleX][balleY]='B';
-        }
-        for (int i = 0; i <=3 ; ++i) {
-            Plateau[balleX][balleY]=' ';
-            balleX--;
-            balleY--;
-            Plateau[balleX][balleY]='B';
-        }
-        for (int i = 0; i <=5; ++i) {
-            Plateau[balleX][balleY]=' ';
-            balleX++;
-            balleY--;
-            Plateau[balleX][balleY]='B';
-        }
+    Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
+    if(Plateau[balleX+1][balleY]!='#' && decalage_1<4){
+        balleX++;
+        balleY++;
+        Plateau[balleX][balleY] ='B';
+        decalage_1++;
+    }
+    else if(Plateau[balleX][balleY+1]!='#'&& decalage_2<4){
+        balleX--;
+        balleY++;
+        Plateau[balleX][balleY] ='B';
+        decalage_2++;
+    }
+    else if(Plateau[balleX-1][balleY]!='#'&& decalage_3<4){
+        balleX--;
+        balleY--;
+        Plateau[balleX][balleY] ='B';
+        decalage_3++;
+    }
+    else if(Plateau[balleX][balleY-1]!='#'&& decalage_4<4){
+        balleX++;
+        balleY--;
+        Plateau[balleX][balleY] ='B';
+        decalage_4++;
+    }
+    else{
+        decalage_1=0;
+        decalage_2=0;
+        decalage_3=0;
+        decalage_4=0;
     }
 
 }
@@ -299,15 +421,14 @@ void balle(){
 void boucle(){
     plateau();
     while (1){
+        system("CLS");
         affichage();
         oiseau();
-
+        balle();
         mur();
         char commande = _getch();
-        if(commande == 's'){
-            touches(commande);
-        }
         touches(commande);
+
     }
 }
 
@@ -345,23 +466,40 @@ void menu(){
             break;
         }
         case 2:{
-                plateau();
+            plateau();
                 while (1){
-                    affichage();
-                    oiseau();
-                    mur();
-                    char commande = _getch();
-                    if(commande == 's'){
+                    if(vie>0){
+                        system("CLS");
+                        affichage();
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        char commande = _getch();
+                        if (commande == 'p'){
+                            printf("Vous etes en pause");
+                            chrono();
+                            touches(commande);
+                            menu();
+                        }
+                        else if(commande == 's'){
+                            sauvegarde();
+                            menu();
+                        }
                         touches(commande);
+                        if (compteur == 4) {
+                            scores();
+                            Sleep(1000);
+                            compteur=0;
+                            menu();
+                        }
+                    }
+                    else{
+                        printf("\n\nGAME OVER\n\n");
+                        Sleep(500);
+                        vie = 3;
                         menu();
                     }
-                    touches(commande);
-                    if (compteur == 4) {
-                        printf("Le niveau est fini");
-                        Sleep(1000);
-                        menu();
-                }
-
             }
         }
 
