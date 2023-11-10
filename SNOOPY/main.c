@@ -514,18 +514,20 @@ void menu(){
                         printf("Bravo vous avez reussi le niveau !!");
                         scores();
                         Sleep(1000);
+                        printf("EN ATTENTE DU PROCHAIN NIVEAU");
+                        Sleep(3000);
                         temps_ecoule = 0;
                         compteur = 0;
                         droit_bouger=0;
                         droit_pousser = 0;
                         vie = 3;
-                        printf("EN ATTENTE DU PROCHAIN NIVEAU");
                     }
                     else if (vie<=0 ){
                         printf("\n\nGAME OVER\n\n");
                         Sleep(500);
                         menu();
                     }
+                    break;
             }
 
         case 3:{
