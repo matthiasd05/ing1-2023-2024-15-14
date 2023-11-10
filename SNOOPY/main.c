@@ -8,7 +8,6 @@ char Plateau[Longueur][Largeur];
 int SnoopyX,SnoopyY;
 int balleX,balleY;
 int murX,murY;
-int temps=120;
 int mur_cassableX,mur_cassableY;
 int mur_piegeX,mur_piegeY;
 int oiseauX,oiseauY,oiseau1X,oiseau1Y,oiseau2X,oiseau2Y,oiseau3X,oiseau3Y,test_oiseau,test_oiseau1,test_oiseau2,test_oiseau3;
@@ -112,19 +111,12 @@ void plateau(){
 }
 int temps_ecoule;
 int temps_restant =120;
-void chrono(){
-    if(temps_ecoule<120){
-        while(droit_bouger==1){
-            Sleep(1000);
-            temps_ecoule++;
-        }
-    }
-    temps_restant=120-temps_ecoule;
-    printf("Temps restant: %d",temps_restant);
 
-}
+
 
 void barre_vie(){
+    printf("\n");
+    printf("Nombre de vies : ");
     for (int i = 0; i <vie; ++i) {
         printf("%c",coeur);
     }
@@ -136,15 +128,28 @@ void barre_vie(){
         vie= vie-3;
     }
 }
-void scores(){
-    while(temps_ecoule<120){
-        if(droit_chronometrer==1){
-            Sleep(1000);
-            temps_ecoule++;
-            temps_restant=120-temps_ecoule;
+
+void chrono(){
+    while (droit_chronometrer==1){
+            if(temps_ecoule<600){
+                temps_ecoule++;
+                Sleep(200);
+                temps_restant = 600 - temps_ecoule;
+                droit_chronometrer = 0;
+            }
         }
+    if(temps_ecoule%5 == 0){
+        printf("%d secondes",temps_restant/5);
     }
-    printf("Votre score est de : %d",temps_restant*100);
+    droit_chronometrer = 1;
+
+}
+void scores(){
+    temps_ecoule++;
+    Sleep(1000);
+    temps_restant = 120 - temps_ecoule;
+    int score = temps_restant*100;
+    printf("VOTRE SCORE EST DE %d\n\n",score);
 }
 void affichage(){
     for (int i = 0; i < Longueur; ++i) {
@@ -153,9 +158,9 @@ void affichage(){
         }
         printf("\n");
     }
-    printf("\n");
-    printf("Nombre de vies : ");
     barre_vie();
+    printf("Temps restant : ");
+    chrono();
 }
 void sauvegarde(){
     /*
@@ -284,102 +289,115 @@ void mur(){
 
 }
 void touches(char commande){
-    switch (commande) {
-        case 'r':{
-            if( SnoopyX-1>0){
-                if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else{
-                    Plateau[SnoopyX][SnoopyY] = ' ';
-                    SnoopyX--;
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-            }
-
-            break;
-        }
-        case 'f':{
-            if(SnoopyX+1<Longueur-1){
-                if((droit_pousser>=1 || droit_casser==0)&&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else{
-                    Plateau[SnoopyX][SnoopyY] = ' ';
-                    SnoopyX++;
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-            }
-            break;
-        }
-        case 'd':{
-            if(SnoopyY-1>0){
-                if((droit_pousser>=1 || droit_casser==0) && Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else{
-                    Plateau[SnoopyX][SnoopyY] = ' ';
-                    SnoopyY--;
-                    Plateau[SnoopyX][SnoopyY] = 'S';
+    if (droit_bouger == 1){
+        switch (commande) {
+            case 'r':{
+                if( SnoopyX-1>0){
+                    if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else{
+                        Plateau[SnoopyX][SnoopyY] = ' ';
+                        SnoopyX--;
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
                 }
 
+                break;
             }
-            break;
-        }
-        case 'g':{
-            if(SnoopyY+1<Largeur-1){
-                if((droit_pousser>=1 || droit_casser==0) && Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
+            case 'f':{
+                if(SnoopyX+1<Longueur-1){
+                    if(droit_pousser>=1 &&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else{
+                        Plateau[SnoopyX][SnoopyY] = ' ';
+                        SnoopyX++;
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
                 }
-                else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
-                else{
-                    Plateau[SnoopyX][SnoopyY] = ' ';
-                    SnoopyY++;
-                    Plateau[SnoopyX][SnoopyY] = 'S';
-                }
+                break;
+            }
+            case 'd':{
+                if(SnoopyY-1>0){
+                    if(droit_pousser>=1 && Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else{
+                        Plateau[SnoopyX][SnoopyY] = ' ';
+                        SnoopyY--;
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
 
+                }
+                break;
             }
-            break;
+            case 'g':{
+                if(SnoopyY+1<Largeur-1){
+                    if(droit_pousser>=1&& Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+                    else{
+                        Plateau[SnoopyX][SnoopyY] = ' ';
+                        SnoopyY++;
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    }
+
+                }
+                break;
+            }
+            case 's':{
+                sauvegarde();
+                break;
+            }
+            case'p':{
+                char reprendre =_getch();
+                if(reprendre=='p'){
+                    droit_bouger = 1;
+                }
+                break;
+            }
+            case'b':{
+                droit_casser=1;
+                murCassable();
+                break;
+            }
+        }
     }
-        case 's':{
-            sauvegarde();
-            break;
-        }
-        case'p':{
-            droit_chronometrer=0;
-            chrono();
-            char reprendre =_getch();
-            if(reprendre=='p'){
-                droit_bouger = 1;
-            }
-            break;
-        }
-        case'b':{
-            droit_casser=1;
-            murCassable();
-            break;
-        }
-
 }
-}
+int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
 void oiseau(){
-    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY]||
-       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau1X][oiseau1Y] ||
-       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau2X][oiseau2Y] ||
-       Plateau[SnoopyX][SnoopyY] == Plateau[oiseau3X][oiseau3Y]){
+    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY] && compte_oiseau1==0){
             printf("Vous avez un oiseau\n");
             compteur++;
+            compte_oiseau1++;
+    }
+    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau1X][oiseau1Y] && compte_oiseau2==0){
+        printf("Vous avez un oiseau\n");
+        compteur++;
+        compte_oiseau2++;
+    }
+    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau2X][oiseau2Y] && compte_oiseau3==0){
+        printf("Vous avez un oiseau\n");
+        compteur++;
+        compte_oiseau3++;
+    }
+    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau3X][oiseau3Y] && compte_oiseau4==0){
+        printf("Vous avez un oiseau\n");
+        compteur++;
+        compte_oiseau4++;
     }
 }
 int decalage_1,decalage_2,decalage_3,decalage_4;
@@ -431,7 +449,7 @@ void boucle(){
 
     }
 }
-
+int continuer = 1;
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
     int choix;
@@ -467,41 +485,48 @@ void menu(){
         }
         case 2:{
             plateau();
-                while (1){
-                    if(vie>0){
+                while (vie>0&& compteur<4){
                         system("CLS");
                         affichage();
                         oiseau();
                         balle();
                         mur();
                         murCassable();
-                        char commande = _getch();
-                        if (commande == 'p'){
-                            printf("Vous etes en pause");
-                            chrono();
+                        if(kbhit()){
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
                             touches(commande);
-                            menu();
-                        }
-                        else if(commande == 's'){
-                            sauvegarde();
-                            menu();
-                        }
-                        touches(commande);
-                        if (compteur == 4) {
-                            scores();
-                            Sleep(1000);
-                            compteur=0;
-                            menu();
                         }
                     }
-                    else{
+                    if (compteur == 4) {
+                        printf("Bravo vous avez reussi le niveau !!");
+                        scores();
+                        Sleep(1000);
+                        temps_ecoule = 0;
+                        compteur = 0;
+                        droit_bouger=0;
+                        droit_pousser = 0;
+                        vie = 3;
+                        printf("EN ATTENTE DU PROCHAIN NIVEAU");
+                    }
+                    else if (vie<=0 ){
                         printf("\n\nGAME OVER\n\n");
                         Sleep(500);
-                        vie = 3;
                         menu();
                     }
             }
-        }
 
         case 3:{
             char nomFichier[50];
