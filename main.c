@@ -379,42 +379,44 @@ void menu(){
            "@@@@@@@@@@@@##&#BGGBPPGGGGG##&@@@@@@@@@@\n");
     printf("\n1.Regles du jeu\n2.Lancer un nouveau Jeu\n3.Charger une partie\n4.Mot de passe\n5.Scores\n6.Quitter\n");
     scanf("%d",&choix);
-    switch (choix) {
+    switch (choix) { //ce choix permet de choisir ce que l'on veut faire entre les 6 choix proposés
         case 1:{
-            printf("Les regles du jeu sont les suivantes:\n");
+            printf("Les regles du jeu sont les suivantes:\n"); 
             break;
         }
-        case 2:{
-                plateau();
-                while (1){
-                    affichage();
-                    oiseau();
-                    mur();
-                    char commande = _getch();
-                    if(commande == 's'){
-                        touches(commande);
-                        menu();
-                    }
+       
+        case 2:{ //ce choix permet de lancer un nouveau jeu, on va ensuite appeler toutes les fonctions qui permettent 
+            // au jeu de fonctionner : le plateau qui va imprimer la carte, puis tous les objets utilisés dans le jeu
+            //ainsi que les fonctions de déplacements et de jeu
+            plateau();
+            while (1){
+                affichage();
+                oiseau();
+                mur();
+                char commande = _getch();
+                if(commande == 's'){
                     touches(commande);
-                    if (compteur == 4) {
-                        printf("Le niveau est fini");
-                        Sleep(1000);
-                        menu();
+                    menu();
                 }
-
+                touches(commande);
+                if (compteur == 4) {
+                    printf("Le niveau est fini");
+                    Sleep(1000);
+                    menu();
+                }
             }
         }
 
-        case 3:{
+        case 3:{ //ce choix appelle la fonction sauvegarde
             char nomFichier[50];
-            printf("Entrez le nom du fichier de sauvegarde à charger : ");
+            printf("Entrez le nom du fichier de sauvegarde à charger : "); 
             scanf("%s", nomFichier);
             chargerPartie(nomFichier);
             boucle();
             break;
-
         }
-        case 4:{
+        
+        case 4:{ //ce choix appelle la fonction mot de passe
             char mdp[20];
             int continuer =1;
             do {
@@ -435,14 +437,13 @@ void menu(){
             menu();
 
         }
-        case 5:{
+        case 5:{ //ce choix permet d'afficher les scores
 
         }
-        case 6:{
+        case 6:{ //ce choix permet de quitter le jeu
             printf("Vous avez fini");
             break;
         }
-}
 }
 int main() {
     menu();
