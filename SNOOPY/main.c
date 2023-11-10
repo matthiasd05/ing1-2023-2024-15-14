@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
-#include <time.h>
 #define Longueur 10
 #define Largeur 20
 char Plateau[Longueur][Largeur];
@@ -115,19 +114,24 @@ int temps_restant =120;
 
 
 void barre_vie(){
-    printf("\n");
+    printf("\n");// Saut a la ligne
+    // Affiche le nombre de vies actuelles sous la forme de symboles de dollars
     printf("Nombre de vies : ");
-    for (int i = 0; i <vie; ++i) {
-        printf("%c",coeur);
+    for (int i = 0; i < vie; ++i) {
+        printf("%c", coeur);
     }
-    printf("\n");
+    printf("\n");// Saut de ligne
+    // Vérifie certaines conditions pour ajuster le nombre de vies
     if(Plateau[balleX][balleY]==Plateau[SnoopyX][SnoopyY] || temps_restant==0){
+        // Décrémente le nombre de vies si Snoopy est sur la même case que la balle ou si le temps est écoulé
         vie--;
     }
     else if(Plateau[SnoopyX][SnoopyY]==Plateau[mur_piegeX][mur_piegeY]){
-        vie= vie-3;
+        // Décrémente le nombre de vies de 3 si Snoopy est sur la même case qu'un block piège
+        vie = vie - 3;
     }
 }
+
 
 void chrono(){
     while (droit_chronometrer==1){
