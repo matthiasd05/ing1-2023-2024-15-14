@@ -195,15 +195,21 @@ void sauvegarde(){
 }
 
 
-/*
- * Cette fonction va nous permettre de charger la partie sauvegardée par la fonction d'avant. Elle utilise la même logique sauf que là nous sommes en mode r(read), on va donc ressortir les éléments sauvegardés dans le fichier
- * */
-
 void chargerPartie(const char *nomFichier) {
+    /*
+     * Cette fonction va nous permettre de charger la partie sauvegardée par la fonction d'avant.
+     * Elle utilise la même logique sauf que là nous sommes en mode r (read),
+     * on va donc ressortir les éléments sauvegardés dans le fichier
+     */
+
+    // Ouvre le fichier spécifié en mode lecture (read)
     FILE *fichier_charge = fopen(nomFichier, "r");
-    FILE  *fichier = fopen("NIVEAU1.txt","r");
+
+    // Ouvre le fichier "NIVEAU1.txt" en mode lecture (read)
+    FILE *fichier = fopen("NIVEAU1.txt", "r");
+
     // Variables pour stocker les données lues depuis le fichier
-    int sX, sY, bX, bY, mX, mY,oX, oY, o1X, o1Y, o2X, o2Y, o3X, o3Y;
+    int sX, sY, bX, bY, mX, mY, oX, oY, o1X, o1Y, o2X, o2Y, o3X, o3Y;
 
     // Lire les données du fichier pour restaurer l'état du jeu
     fscanf(fichier_charge, "Snoopy : (%d, %d)\n", &sX, &sY);
@@ -213,7 +219,6 @@ void chargerPartie(const char *nomFichier) {
     fscanf(fichier_charge, "Oiseau2 : (%d, %d)\n", &o1X, &o1Y);
     fscanf(fichier_charge, "Oiseau3 : (%d, %d)\n", &o2X, &o2Y);
     fscanf(fichier_charge, "Oiseau4 : (%d, %d)\n", &o3X, &o3Y);
-
 
     // Fermer le fichier après avoir lu les données
     fclose(fichier_charge);
@@ -231,9 +236,10 @@ void chargerPartie(const char *nomFichier) {
     oiseau1Y = o1Y;
     oiseau2X = o2X;
     oiseau2Y = o2Y;
-    oiseau2X = o3X;
-    oiseau2Y = o3Y;
+    oiseau3X = o3X;
+    oiseau3Y = o3Y;
 
+    // Met à jour le plateau avec les positions des éléments chargés
     Plateau[SnoopyX][SnoopyY] = 'S';
     Plateau[balleX][balleY] = 'B';
     Plateau[murX][murY] = 'M';
@@ -241,9 +247,8 @@ void chargerPartie(const char *nomFichier) {
     Plateau[oiseau1X][oiseau1Y] = 'O';
     Plateau[oiseau2X][oiseau2Y] = 'O';
     Plateau[oiseau3X][oiseau3Y] = 'O';
-
-
 }
+
 
 void murCassable(){
     if(droit_casser==1){
