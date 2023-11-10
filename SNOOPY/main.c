@@ -131,13 +131,13 @@ void barre_vie(){
 
 void chrono(){
     while (droit_chronometrer==1){
-            if(temps_ecoule<600){
-                temps_ecoule++;
-                Sleep(200);
-                temps_restant = 600 - temps_ecoule;
-                droit_chronometrer = 0;
-            }
+        if(temps_ecoule<600){
+            temps_ecoule++;
+            Sleep(200);
+            temps_restant = 600 - temps_ecoule;
+            droit_chronometrer = 0;
         }
+    }
     if(temps_ecoule%5 == 0){
         printf("%d secondes",temps_restant/5);
     }
@@ -167,10 +167,16 @@ void sauvegarde(){
      * On va créer un tableau pouvant contenir jusqu'à 50 caractères qui va représenter le nom du fichier créé en 1s
      */
     char nomFichier[50];
+    // Invite l'utilisateur à entrer le nom du fichier de sauvegarde
     printf("Entrez le nom du fichier de sauvegarde : ");
+    // Lit le nom du fichier à partir de l'entrée utilisateur et le stocke dans le tableau nomFichier
     scanf("%s", nomFichier);
+    // Pause d'une seconde (1000 millisecondes)
     Sleep(1000);
-    /*On va déclarer vers une structure FILE ce qui va nous permettre de pouvoir réaliser des opérations sur nos fichiers puis on on ouvre (ici on le crée)et on le lit (w= write)*/
+
+    /* On va déclarer vers une structure FILE ce qui va nous permettre de pouvoir réaliser des opérations sur nos fichiers
+     * puis on on ouvre (ici on le crée) et on le lit (w= write)
+     */
     FILE *fichier_sauvegarde;
     fichier_sauvegarde = fopen(nomFichier, "w");
 
@@ -181,11 +187,13 @@ void sauvegarde(){
     fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau2X, oiseau2Y);
     fprintf(fichier_sauvegarde, "Oiseau4 : (%d, %d)\n", oiseau3X, oiseau3Y);
 
+    // Ferme le fichier après avoir écrit les informations
     fclose(fichier_sauvegarde);
 
+    // Affiche un message indiquant que la partie a été sauvegardée dans le fichier spécifié
     printf("Partie sauvegardee dans le fichier : %s\n", nomFichier);
-
 }
+
 
 /*
  * Cette fonction va nous permettre de charger la partie sauvegardée par la fonction d'avant. Elle utilise la même logique sauf que là nous sommes en mode r(read), on va donc ressortir les éléments sauvegardés dans le fichier
@@ -252,7 +260,7 @@ void murCassable(){
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
     }
-    }
+}
 
 void mur(){
     static int droit_bouger=0;
@@ -380,9 +388,9 @@ void touches(char commande){
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
 void oiseau(){
     if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY] && compte_oiseau1==0){
-            printf("Vous avez un oiseau\n");
-            compteur++;
-            compte_oiseau1++;
+        printf("Vous avez un oiseau\n");
+        compteur++;
+        compte_oiseau1++;
     }
     else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau1X][oiseau1Y] && compte_oiseau2==0){
         printf("Vous avez un oiseau\n");
@@ -485,65 +493,65 @@ void menu(){
         }
         case 2:{
             plateau();
-                while (vie>0&& compteur<4){
-                        system("CLS");
-                        affichage();
-                        oiseau();
-                        balle();
-                        mur();
-                        murCassable();
-                        if(kbhit()){
-                            char commande = _getch();
-                            if (commande == 'p'){
-                                droit_chronometrer = 0;
-                                droit_bouger = 0;
-                                printf("Vous etes en pause");
-                                menu();
-                                printf("\n Appuyer sur n'importe quelle touche : ");
-                                droit_bouger = 1;
-                                droit_chronometrer = 1;
-                            }
-                            else if(commande == 's'){
-                                sauvegarde();
-                                menu();
-                            }
-                            touches(commande);
-                        }
+            while (vie>0&& compteur<4){
+                system("CLS");
+                affichage();
+                oiseau();
+                balle();
+                mur();
+                murCassable();
+                if(kbhit()){
+                    char commande = _getch();
+                    if (commande == 'p'){
+                        droit_chronometrer = 0;
+                        droit_bouger = 0;
+                        printf("Vous etes en pause");
+                        menu();
+                        printf("\n Appuyer sur n'importe quelle touche : ");
+                        droit_bouger = 1;
+                        droit_chronometrer = 1;
                     }
-                    if (compteur == 4) {
-                        printf("Bravo vous avez reussi le niveau !!");
-                        scores();
-                        Sleep(1000);
-                        printf("EN ATTENTE DU PROCHAIN NIVEAU");
-                        Sleep(3000);
-                        temps_ecoule = 0;
-                        compteur = 0;
-                        droit_bouger=0;
-                        droit_pousser = 0;
-                        vie = 3;
-                    }
-                    else if (vie<=0 ){
-                        printf("\n\nGAME OVER\n\n");
-                        Sleep(500);
-                        vie = 3;
-                        temps_ecoule = 0;
-                        compteur = 0;
-                        droit_pousser = 0;
-                        continuer = 0;
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                        Plateau[murX][murY] = 'M';
-                        Plateau[balleX][balleY] = 'B';
-                        Plateau[mur_cassableX][mur_cassableY] = 'C';
-                        Plateau[mur_piegeX][mur_piegeY] = 'X';
-                        Plateau[oiseauX][oiseauY] = 'O';
-                        Plateau[oiseau1X][oiseau1Y] = 'O';
-                        Plateau[oiseau2X][oiseau2Y] = 'O';
-                        Plateau[oiseau3X][oiseau3Y] = 'O';
+                    else if(commande == 's'){
+                        sauvegarde();
                         menu();
                     }
-                    continuer = 1;
-                    break;
+                    touches(commande);
+                }
             }
+            if (compteur == 4) {
+                printf("Bravo vous avez reussi le niveau !!");
+                scores();
+                Sleep(1000);
+                printf("EN ATTENTE DU PROCHAIN NIVEAU");
+                Sleep(3000);
+                temps_ecoule = 0;
+                compteur = 0;
+                droit_bouger=0;
+                droit_pousser = 0;
+                vie = 3;
+            }
+            else if (vie<=0 ){
+                printf("\n\nGAME OVER\n\n");
+                Sleep(500);
+                vie = 3;
+                temps_ecoule = 0;
+                compteur = 0;
+                droit_pousser = 0;
+                continuer = 0;
+                Plateau[SnoopyX][SnoopyY] = 'S';
+                Plateau[murX][murY] = 'M';
+                Plateau[balleX][balleY] = 'B';
+                Plateau[mur_cassableX][mur_cassableY] = 'C';
+                Plateau[mur_piegeX][mur_piegeY] = 'X';
+                Plateau[oiseauX][oiseauY] = 'O';
+                Plateau[oiseau1X][oiseau1Y] = 'O';
+                Plateau[oiseau2X][oiseau2Y] = 'O';
+                Plateau[oiseau3X][oiseau3Y] = 'O';
+                menu();
+            }
+            continuer = 1;
+            break;
+        }
 
         case 3:{
             char nomFichier[50];
@@ -582,7 +590,7 @@ void menu(){
             printf("Vous avez fini");
             break;
         }
-}
+    }
 }
 int main() {
     menu();
