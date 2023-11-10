@@ -392,27 +392,33 @@ void touches(char commande){
 }
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
 void oiseau(){
-    if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseauX][oiseauY] && compte_oiseau1==0){
+    // Vérifie si Snoopy est sur la même case qu'un oiseau et si cet oiseau n'a pas encore été rencontré
+    if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseauX][oiseauY] && compte_oiseau1 == 0){
+        // Affiche un message indiquant que Snoopy a rencontré un oiseau
         printf("Vous avez un oiseau\n");
+        // Incrémente le compteur global des rencontres d'oiseaux
         compteur++;
+        // Indique que cet oiseau a été rencontré en mettant à jour la variable de compte
         compte_oiseau1++;
     }
-    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau1X][oiseau1Y] && compte_oiseau2==0){
+        // Répète le processus pour chaque oiseau, en vérifiant s'il est sur la même case que Snoopy et s'il n'a pas encore été rencontré
+    else if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseau1X][oiseau1Y] && compte_oiseau2 == 0){
         printf("Vous avez un oiseau\n");
         compteur++;
         compte_oiseau2++;
     }
-    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau2X][oiseau2Y] && compte_oiseau3==0){
+    else if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseau2X][oiseau2Y] && compte_oiseau3 == 0){
         printf("Vous avez un oiseau\n");
         compteur++;
         compte_oiseau3++;
     }
-    else if(Plateau[SnoopyX][SnoopyY]== Plateau[oiseau3X][oiseau3Y] && compte_oiseau4==0){
+    else if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseau3X][oiseau3Y] && compte_oiseau4 == 0){
         printf("Vous avez un oiseau\n");
         compteur++;
         compte_oiseau4++;
     }
 }
+
 int decalage_1,decalage_2,decalage_3,decalage_4;
 void balle(){
     Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
