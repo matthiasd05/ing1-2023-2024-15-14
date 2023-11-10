@@ -16,6 +16,7 @@ int droit_casser;
 int droit_bouger=1;
 int droit_chronometrer=1;
 int vie = 3;
+int score_finale = 0;
 char coeur= '$';
 void plateau(){
     FILE *fichier;
@@ -154,6 +155,7 @@ void scores(){
     temps_restant = 120 - temps_ecoule;
     int score = temps_restant*100;
     printf("VOTRE SCORE EST DE %d\n\n",score);
+    score_finale=score_finale+score;
 }
 void affichage(){
     for (int i = 0; i < Longueur; ++i) {
@@ -609,7 +611,7 @@ void menu(){
 
         }
         case 5:{
-
+            printf("Votre score actuel est de %d",score_finale);
         }
         case 6:{
             printf("Vous avez fini");
