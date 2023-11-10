@@ -525,8 +525,23 @@ void menu(){
                     else if (vie<=0 ){
                         printf("\n\nGAME OVER\n\n");
                         Sleep(500);
+                        vie = 3;
+                        temps_ecoule = 0;
+                        compteur = 0;
+                        droit_pousser = 0;
+                        continuer = 0;
+                        Plateau[SnoopyX][SnoopyY] = 'S';
+                        Plateau[murX][murY] = 'M';
+                        Plateau[balleX][balleY] = 'B';
+                        Plateau[mur_cassableX][mur_cassableY] = 'C';
+                        Plateau[mur_piegeX][mur_piegeY] = 'X';
+                        Plateau[oiseauX][oiseauY] = 'O';
+                        Plateau[oiseau1X][oiseau1Y] = 'O';
+                        Plateau[oiseau2X][oiseau2Y] = 'O';
+                        Plateau[oiseau3X][oiseau3Y] = 'O';
                         menu();
                     }
+                    continuer = 1;
                     break;
             }
 
