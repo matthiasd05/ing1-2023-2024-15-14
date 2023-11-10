@@ -307,7 +307,12 @@ void murCassable(){
 }
 
 void balle(){
+    //La boucle se répète tant que la balle n'est pas au même endroit que Snoopy
     while(Plateau[balleX][balleY]!= Plateau[SnoopyX][SnoopyY]){
+        //On définit 4 boucles qui vont faire en sorte que la balle se déplace sur toute la carte, selon les
+        //coordonnées X et Y
+        //Lorsque la balle se déplace son ancienne case est remplacée par un espace vide, et l'espace de la nouvelle
+        //case devient un B
         for (int i = 0; i <=7 ; ++i) {
             Plateau[balleX][balleY]=' ';
             balleX++;
@@ -332,22 +337,6 @@ void balle(){
             balleY--;
             Plateau[balleX][balleY]='B';
         }
-    }
-
-}
-
-void boucle(){
-    plateau();
-    while (1){
-        affichage();
-        oiseau();
-
-        mur();
-        char commande = _getch();
-        if(commande == 's'){
-            touches(commande);
-        }
-        touches(commande);
     }
 }
 
