@@ -436,12 +436,13 @@ void oiseau(){
 }
 
 int decalage_1,decalage_2,decalage_3,decalage_4;
+
 void balle(){
     Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
     if(Plateau[balleX+1][balleY]!='#' && decalage_1<4){
-        balleX++;
+        balleX++; //Faire en sorte que la balle se déplace en incrémentant ses coordonnées
         balleY++;
-        Plateau[balleX][balleY] ='B';
+        Plateau[balleX][balleY] ='B'; //Remplacer l'espace vide de la nouvelle case par un B qui symbolise la balle
         decalage_1++;
     }
     else if(Plateau[balleX][balleY+1]!='#'&& decalage_2<4){
@@ -470,6 +471,7 @@ void balle(){
     }
 
 }
+
 
 void boucle(){
     plateau();
