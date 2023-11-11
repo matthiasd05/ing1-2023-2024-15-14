@@ -264,17 +264,17 @@ void murCassable(){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
-        // Vérifie si Snoopy est à côté d'un mur cassable (en dessous)
+            // Vérifie si Snoopy est à côté d'un mur cassable (en dessous)
         else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
-        // Vérifie si Snoopy est à côté d'un mur cassable (a droite)
+            // Vérifie si Snoopy est à côté d'un mur cassable (a droite)
         else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
-        // Vérifie si Snoopy est à côté d'un mur cassable (a gauche)
+            // Vérifie si Snoopy est à côté d'un mur cassable (a gauche)
         else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
@@ -296,41 +296,8 @@ void mur(){
             Plateau[murX][murY]= 'M';
             //Mets la lettre M sur la nouvelle case
             droit_bouger=1;
-            droit_pousser=1;
         }
-        //Vérifie si Snoopy est à côté d'un mur poussable (en dessous)
-        else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY] && droit_bouger==0){
-            Plateau[murX][murY]=' ' ;
-            //Remplace l'ancienne case par un espace vide
-            murY--;
-            //Soustrait 1 à la coordonnée en Y (ordonnée du mur)
-            Plateau[murX][murY]= 'M';
-            //Mets la lettre M sur la nouvelle case 
-            droit_bouger=1;
-            droit_pousser=1;
-        }
-        //Vérifie si Snoopy est à côté d'un mur poussable (à droite)
-        else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY] && droit_bouger==0){
-            Plateau[murX][murY]=' ' ;
-            //Remplace l'ancienne case par un espace vide
-            murX++;
-            //Ajoute 1 à la coordonnée en X (ordonnée du mur)
-            Plateau[murX][murY]= 'M';
-            //Mets la lettre M sur la nouvelle case 
-            droit_bouger=1;
-            droit_pousser=1;
-        }
-        //Vérifie si Snoopy est à côté d'un mur poussable (à gauche)
-        else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY] && droit_bouger==0){
-            Plateau[murX][murY]=' ' ;
-            //Remplace l'ancienne case par un espace vide
-            murX--;
-            //Soustrait 1 à la coordonnée en X (ordonnée du mur)
-            Plateau[murX][murY]= 'M';
-            //Mets la lettre M sur la nouvelle case 
-            droit_bouger=1;
-            droit_pousser=1;
-        }
+        droit_pousser=1;
     }
 
 }
@@ -415,7 +382,7 @@ void touches(char commande){
                 }
                 break;
             }
-            case'b':{
+            case'c':{
                 droit_casser=1;
                 murCassable();
                 break;
