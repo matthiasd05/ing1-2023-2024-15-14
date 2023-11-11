@@ -1,0 +1,3 @@
+/Users/baptistelemaitre/CLionProjects/SNOOPY_PROJECT/cmake-build-debug/CMakeFiles/SNOOPY_PROJECT.dir
+/Users/baptistelemaitre/CLionProjects/SNOOPY_PROJECT/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/baptistelemaitre/CLionProjects/SNOOPY_PROJECT/cmake-build-debug/CMakeFiles/rebuild_cache.dir
