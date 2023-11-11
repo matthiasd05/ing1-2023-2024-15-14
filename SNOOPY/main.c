@@ -551,6 +551,14 @@ void menu(){
                 compteur = 0;
                 droit_pousser = 0;
                 continuer = 0;
+                decalage_1=0;
+                decalage_2=0;
+                decalage_3=0;
+                decalage_4=0;
+                compte_oiseau1=0;
+                compte_oiseau2= 0;
+                compte_oiseau3 =0;
+                compte_oiseau4 = 0;
                 Plateau[SnoopyX][SnoopyY] = 'S';
                 Plateau[murX][murY] = 'M';
                 Plateau[balleX][balleY] = 'B';
