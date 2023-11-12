@@ -19,12 +19,15 @@ int vie = 3;
 int score_finale = 0;
 char coeur= '$';
 void plateau(){
+    //On ouvre le fichier contenant notre plateau que l'on va associer à un tableau 
     FILE *fichier;
     fichier= fopen("niveau1.txt","r");
     char caractere_lu;
     signed char texte[Longueur];
+    // On parcourt toutes les cases du tableau
     for (int i = 0; i < Longueur ; ++i) {
         for (int j = 0; j <Largeur ; ++j) {
+            //On lit chaque caractère de notre fichier texte et on les compare pour que les différents éléments soient affectés dans le tableau
             caractere_lu = fgetc(fichier);
             if(caractere_lu != EOF){
                 if(caractere_lu== '#'){
@@ -104,6 +107,7 @@ void plateau(){
             }
 
         }
+        // On indique jusqu'où il est nécesaaire de lire le fichier
         fgets(texte,Longueur,fichier);
         printf("\n");
     }
@@ -135,8 +139,10 @@ void barre_vie(){
 
 
 void chrono(){
+    // Le temps imparti est de 120 secondes cependant nous avons divisé les secondes en 5*0.2s pour permettre une meilleure expérience de jeu 
     while (droit_chronometrer==1){
         if(temps_ecoule<600){
+            //On incrémente à chaque fois notre temps coulé
             temps_ecoule++;
             Sleep(200);
             temps_restant = 600 - temps_ecoule;
@@ -144,12 +150,14 @@ void chrono(){
         }
     }
     if(temps_ecoule%5 == 0){
+        //On affiche le temps qu'il nous reste
         printf("%d secondes",temps_restant/5);
     }
     droit_chronometrer = 1;
 
 }
 void scores(){
+    // Le score est en fonction du temps donc on compte les secondes comme dans la fonction précédente 
     temps_ecoule++;
     Sleep(1000);
     temps_restant = 120 - temps_ecoule;
@@ -158,6 +166,7 @@ void scores(){
     score_finale=score_finale+score;
 }
 void affichage(){
+    // La fonction comme son nom l'indique permet d'afficher les éléments nécessaires à l'écran
     for (int i = 0; i < Longueur; ++i) {
         for (int j = 0; j < Largeur; ++j) {
             printf("%c", Plateau[i][j]);
@@ -303,15 +312,18 @@ void mur(){
 }
 void touches(char commande){
     if (droit_bouger == 1){
+        // La fonction s'occupe des déplacements, elle est appelée suite à la fnction getch qui détete l'appui du touche et permet donc les différents déplacements 
         switch (commande) {
             case 'r':{
                 if( SnoopyX-1>0){
+                    //Permet d'éviter que Snoopy avance lorsqu'il n'a pas le droit
                     if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
                         Plateau[SnoopyX][SnoopyY] = 'S';
                     }
                     else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
                         Plateau[SnoopyX][SnoopyY] = 'S';
                     }
+                        // Si Snoopy peut se déplacer alors il n'y a qu'à effacer sa position puis l'afficher àla position suivante 
                     else{
                         Plateau[SnoopyX][SnoopyY] = ' ';
                         SnoopyX--;
@@ -372,6 +384,7 @@ void touches(char commande){
                 break;
             }
             case 's':{
+                //Appel de la fonction sauvegarde
                 sauvegarde();
                 break;
             }
@@ -458,6 +471,7 @@ void balle(){
 
 
 void boucle(){
+    // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
     plateau();
     while (1){
         system("CLS");
@@ -465,8 +479,11 @@ void boucle(){
         oiseau();
         balle();
         mur();
-        char commande = _getch();
-        touches(commande);
+        murCassable();
+        if(kbhit()){
+            char commande = _getch();
+            touches(commande);
+        }
 
     }
 }
@@ -541,15 +558,20 @@ void menu(){
             break;
         }
         case 2:{
+            //Le fait d'appuyer sur 2 vanous afficher notre fichier texte qui est alors devenu un tableaau
             plateau();
             while (vie>0&& compteur<4){
+                // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran 
                 system("CLS");
                 affichage();
+                //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
                 oiseau();
                 balle();
                 mur();
                 murCassable();
+                // La commande suivante va vérifier s'il y a eu une détection des touches 
                 if(kbhit()){
+                    // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
                     char commande = _getch();
                     if (commande == 'p'){
                         droit_chronometrer = 0;
@@ -564,10 +586,12 @@ void menu(){
                         sauvegarde();
                         menu();
                     }
+                    // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
                     touches(commande);
                 }
             }
             if (compteur == 4) {
+                //On indique à l'utilisateur qu'il a fini le niveau en lui annoçant son score puis par la suite, il accédera au niveau 2
                 printf("Bravo vous avez reussi le niveau !!");
                 scores();
                 Sleep(1000);
@@ -580,6 +604,7 @@ void menu(){
                 vie = 3;
             }
             else if (vie<=0 ){
+                // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie 
                 printf("\n\nGAME OVER\n\n");
                 Sleep(500);
                 vie = 3;
@@ -611,6 +636,7 @@ void menu(){
         }
 
         case 3:{
+            // On associe le nom du fichier à une chaine d'au plus 50 caractères et on appelle alors la fonction prévue pour la sauvegarde
             char nomFichier[50];
             printf("Entrez le nom du fichier de sauvegarde à charger : ");
             scanf("%s", nomFichier);
@@ -620,6 +646,7 @@ void menu(){
 
         }
         case 4:{
+            //On utilise encore une fois une chaîne de caractères, en effet on va comparer le code entré avec le code voulu pour ainsi débloquer le niveau
             char mdp[20];
             int continuer =1;
             do {
@@ -649,6 +676,7 @@ void menu(){
         }
     }
 }
+// On met notre menu qui regroupe lui-même toutes les fonctions dans le main
 int main() {
     menu();
 }
