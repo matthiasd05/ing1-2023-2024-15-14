@@ -19,12 +19,15 @@ int vie = 3;
 int score_finale = 0;
 char coeur= '$';
 void plateau(){
+    //On ouvre le fichier contenant notre plateau que l'on va associer à un tableau
     FILE *fichier;
     fichier= fopen("niveau1.txt","r");
     char caractere_lu;
     signed char texte[Longueur];
+    // On parcourt toutes les cases du tableau
     for (int i = 0; i < Longueur ; ++i) {
         for (int j = 0; j <Largeur ; ++j) {
+            //On lit chaque caractère de notre fichier texte et on les compare pour que les différents éléments soient affectés dans le tableau
             caractere_lu = fgetc(fichier);
             if(caractere_lu != EOF){
                 if(caractere_lu== '#'){
@@ -104,6 +107,7 @@ void plateau(){
             }
 
         }
+        // On indique jusqu'où il est nécesaaire de lire le fichier
         fgets(texte,Longueur,fichier);
         printf("\n");
     }
@@ -135,8 +139,10 @@ void barre_vie(){
 
 
 void chrono(){
+    // Le temps imparti est de 120 secondes cependant nous avons divisé les secondes en 5*0.2s pour permettre une meilleure expérience de jeu
     while (droit_chronometrer==1){
         if(temps_ecoule<600){
+            //On incrémente à chaque fois notre temps coulé
             temps_ecoule++;
             Sleep(200);
             temps_restant = 600 - temps_ecoule;
@@ -144,12 +150,14 @@ void chrono(){
         }
     }
     if(temps_ecoule%5 == 0){
+        //On affiche le temps qu'il nous reste
         printf("%d secondes",temps_restant/5);
     }
     droit_chronometrer = 1;
 
 }
 void scores(){
+    // Le score est en fonction du temps donc on compte les secondes comme dans la fonction précédente
     temps_ecoule++;
     Sleep(1000);
     temps_restant = 120 - temps_ecoule;
@@ -158,6 +166,7 @@ void scores(){
     score_finale=score_finale+score;
 }
 void affichage(){
+    // La fonction comme son nom l'indique permet d'afficher les éléments nécessaires à l'écran
     for (int i = 0; i < Longueur; ++i) {
         for (int j = 0; j < Largeur; ++j) {
             printf("%c", Plateau[i][j]);
@@ -301,95 +310,101 @@ void mur(){
     }
 
 }
-void touches(char commande){
-    if (droit_bouger == 1){
-        switch (commande) {
-            case 'r':{
-                if( SnoopyX-1>0){
-                    if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
+void touches(/*char commande*/){
+    if(kbhit()==1){
+        /*int commande = getch();// commende est en int car char ne peut contenir dde chiffre et il est necessaire d'avoir des chivres pour les flèches
+        touches(commande);*/
+        if (droit_bouger == 1){
+            // La fonction s'occupe des déplacements, elle est appelée suite à la fnction getch qui détete l'appui du touche et permet donc les différents déplacements
+            switch (_getch()/*commande*/) {
+                case 's':{
+                    //Appel de la fonction sauvegarde
+                    sauvegarde();
+                    break;
+                }
+                case'p':{
+                    int reprendre =_getch();
+                    if(reprendre=='p'){
+                        droit_bouger = 1;
                     }
-                    else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-                    else{
-                        Plateau[SnoopyX][SnoopyY] = ' ';
-                        SnoopyX--;
-                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    break;
+                }
+                case'c':{
+                    droit_casser=1;
+                    murCassable();
+                    break;
+                }
+                case 72:{
+                    if( SnoopyX-1>0){
+                        //Permet d'éviter que Snoopy avance lorsqu'il n'a pas le droit
+                        if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                            // Si Snoopy peut se déplacer alors il n'y a qu'à effacer sa position puis l'afficher àla position suivante
+                        else{
+                            Plateau[SnoopyX][SnoopyY] = ' ';
+                            SnoopyX--;
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
                     }
                 }
-
-                break;
-            }
-            case 'f':{
-                if(SnoopyX+1<Longueur-1){
-                    if(droit_pousser>=1 &&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-                    else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-                    else{
-                        Plateau[SnoopyX][SnoopyY] = ' ';
-                        SnoopyX++;
-                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    break;
+                case 80:{
+                    if(SnoopyX+1<Longueur-1){
+                        if(droit_pousser>=1 &&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else{
+                            Plateau[SnoopyX][SnoopyY] = ' ';
+                            SnoopyX++;
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
                     }
                 }
-                break;
-            }
-            case 'd':{
-                if(SnoopyY-1>0){
-                    if(droit_pousser>=1 && Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    break;
+                case 75:{
+                    if(SnoopyY-1>0){
+                        if(droit_pousser>=1 && Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else{
+                            Plateau[SnoopyX][SnoopyY] = ' ';
+                            SnoopyY--;
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
                     }
-                    else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-                    else{
-                        Plateau[SnoopyX][SnoopyY] = ' ';
-                        SnoopyY--;
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-
                 }
-                break;
-            }
-            case 'g':{
-                if(SnoopyY+1<Largeur-1){
-                    if(droit_pousser>=1&& Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
+                    break;
+                case 77:{
+                    if(SnoopyY+1<Largeur-1){
+                        if(droit_pousser>=1&& Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
+                        else{
+                            Plateau[SnoopyX][SnoopyY] = ' ';
+                            SnoopyY++;
+                            Plateau[SnoopyX][SnoopyY] = 'S';
+                        }
                     }
-                    else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-                    else{
-                        Plateau[SnoopyX][SnoopyY] = ' ';
-                        SnoopyY++;
-                        Plateau[SnoopyX][SnoopyY] = 'S';
-                    }
-
                 }
-                break;
-            }
-            case 's':{
-                sauvegarde();
-                break;
-            }
-            case'p':{
-                char reprendre =_getch();
-                if(reprendre=='p'){
-                    droit_bouger = 1;
-                }
-                break;
-            }
-            case'c':{
-                droit_casser=1;
-                murCassable();
-                break;
+                    break;
             }
         }
     }
 }
+
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
 void oiseau(){
     // Vérifie si Snoopy est sur la même case qu'un oiseau et si cet oiseau n'a pas encore été rencontré
@@ -458,6 +473,7 @@ void balle(){
 
 
 void boucle(){
+    // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
     plateau();
     while (1){
         system("CLS");
@@ -465,8 +481,12 @@ void boucle(){
         oiseau();
         balle();
         mur();
-        char commande = _getch();
-        touches(commande);
+        murCassable();
+        /*
+        if(kbhit()){
+            int commande = _getch();// commende est en int car char ne peut contenir dde chiffre et il est necessaire d'avoir des chivres pour les flèches
+            touches(commande);
+        }*/
 
     }
 }
@@ -501,19 +521,60 @@ void menu(){
     scanf("%d",&choix);
     switch (choix) {
         case 1:{
-            printf("Les regles du jeu sont les suivantes:\n");
+            printf("Les regles du jeu sont les suivantes:\n"
+                   "1. Informations générales\n"
+                   "    Tout d'abord, le jeu Le Revanche de Snoopy se compose d'un plateau de jeu, du personnage de Snoopy, d'une balle, de différents types de murs, et de quatres oiseaux à récupérer.\n"
+                   "    Un niveau se présente de la manière suivante : Snoopy doit se déplacer sur le plateau afin de récupérer les quatres oiseaux. Pour réussir un niveau il faut : récupérer\n"
+                   "    l'ensemble des oiseaux présents sur le plateau de jeu en mois de 2 minutes, et sans se faire toucher par la balle, au quel cas, Snoopy perdra une vie sur les trois qu'il possède au début.\n"
+                   "    De plus, si le joueur ne fini pas le niveau dans le temps imparti, il perd également une vie.\n"
+                   "2. Snoopy\n"
+                   "    Au début d'un niveau, Snoopy est placé sur une case du plateau et pour se déplacer et récupérer le oiseaux, il peut aller sur les cases se trouvant en haut, en bas, à gauche et à droit de sa position.\n"
+                   "    Il ne peut donc pas se déplacer en diagonale, et ne peut pas non plus se déplacer plus d'une case à la fois. Finalement, il ne peut pas sortir du niveau en traversant les murs extérieurs du plateau.\n"
+                   "3. La balle\n"
+                   "    Contrairement à Snoopy, la balle peut se déplacer exclusivement en diagonale. Lorsqu'elle rencontre un mur délimitant le plateau, elle rebonit.\n"
+                   "    La vitesse de la balle ne varie pas. Et la balle ne peut traverser tout ce qu'elle croise sur son chemein hormis les murs délimitant le plateau et Snoopy.\n"
+                   "    En effet, lorsque la balle rencontre Snoopy, ce dernier perd une vie et retourne au début du niveau.\n"
+                   "4. Les objets\n"
+                   "    Il y a différents types de murs : les murs poussables, cassables, et piégés.\n"
+                   "        - Les murs poussables : lorsque Snoopy se trouve à côté de ce type de bloc, il peut aller sur la case où se trouve le bloc et pousse donc le bloc sur la case d'après.\n"
+                   "          Lorsqu'il se trouve à côté d'un mur délimitant le plateau, ce bloc ne peut pas être poussé en dehors du plateau.\n"
+                   "        - Les murs cassables : lorsque Snoopy se trouve à côté d'un bloc poussable, ce bloc agit comme un bloc normal (comme un bloc qui délimite le plateau), mais lorsque le joueur appuis sur la touche 'c',\n"
+                   "          le mur cassable à côté de Snoopy, se casse.\n"
+                   "        - Les murs piégés : lorsque Snoopy rentre en contact avec un bloc piégé, Snoopy perd une vie et le joueur doit recommencer le niveau.\n"
+                   "5. Victoire/Défaite\n"
+                   "    Pour gagner, le joueur doit avoir récupérer tous les oiseaux sur le plateau en moins de 120 secondes. Lorsque c'est le cas, le niveau d'après se charge automatiquement.\n"
+                   "    Lorsque le joueur n'a plus de vies, un écran de GAME OVER s'affiche et il revient au menu du jeu et recommence une nouvelle partie.\n"
+                   "6. Le temps\n"
+                   "    Pour chaque niveau, le joueur dispose de 120 secondes pour termier le niveau. Lorsqu'il atteint 0, le joueur perd une vie et recommence le niveau.\n"
+                   "7. Scores\n"
+                   "    Le scores se compte de la manière suivante : pour calculer le score, il faut prendre le nombre de secondes restante au niveau puis les multiplier par 100 ce qui constitue le score du niveau.\n"
+                   "    Le score total est simplement la somme des scores obtenus à chaque niveau.\n"
+                   "8. Sauvegarde et chargement de la partie sauvegardé\n"
+                   "    À tout momentn le joueur peut appuier sur la touche 's' du clavier afin de sauvegarder la partie en cours. Le jeu demande donc sous quel nom le joueur veut sauvegarder la partie, puis le jeu sauvegarde la partie et retourne au menu principal\n"
+                   "    Pour charger une partie, il faut aller dans le menu principal et aller dans l'onglet 'charger une partie' puis entrer le nom de la partie à charger.\n"
+                   "9. Mot de passe\n"
+                   "    Chaque niveau du jeu est accessible par un mot de passe défini par les réalisateurs du jeu.\n"
+                   "10. Le mode pause\n"
+                   "    Si le joueur appuis sur la touche 'p' du clavier, le jeu se met en pause, c'est-à-dire que le temps et la balle s'arrêtent et Snoopy ne peut plus se déplacer. Pour enlever le\n"
+                   "    mode pause, le joueur doit appuier de nouveau sur la touche 'p' du clavier.\n"
+                   "Fin des règles du jeu.");
             break;
         }
         case 2:{
+            //Le fait d'appuyer sur 2 vanous afficher notre fichier texte qui est alors devenu un tableaau
             plateau();
             while (vie>0&& compteur<4){
+                // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
                 system("CLS");
                 affichage();
+                //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
                 oiseau();
                 balle();
                 mur();
                 murCassable();
+                // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
+                    // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
                     char commande = _getch();
                     if (commande == 'p'){
                         droit_chronometrer = 0;
@@ -528,10 +589,12 @@ void menu(){
                         sauvegarde();
                         menu();
                     }
+                    // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
                     touches(commande);
                 }
             }
             if (compteur == 4) {
+                //On indique à l'utilisateur qu'il a fini le niveau en lui annoçant son score puis par la suite, il accédera au niveau 2
                 printf("Bravo vous avez reussi le niveau !!");
                 scores();
                 Sleep(1000);
@@ -544,6 +607,7 @@ void menu(){
                 vie = 3;
             }
             else if (vie<=0 ){
+                // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
                 printf("\n\nGAME OVER\n\n");
                 Sleep(500);
                 vie = 3;
@@ -575,6 +639,7 @@ void menu(){
         }
 
         case 3:{
+            // On associe le nom du fichier à une chaine d'au plus 50 caractères et on appelle alors la fonction prévue pour la sauvegarde
             char nomFichier[50];
             printf("Entrez le nom du fichier de sauvegarde à charger : ");
             scanf("%s", nomFichier);
@@ -584,6 +649,7 @@ void menu(){
 
         }
         case 4:{
+            //On utilise encore une fois une chaîne de caractères, en effet on va comparer le code entré avec le code voulu pour ainsi débloquer le niveau
             char mdp[20];
             int continuer =1;
             do {
@@ -613,6 +679,7 @@ void menu(){
         }
     }
 }
+// On met notre menu qui regroupe lui-même toutes les fonctions dans le main
 int main() {
     menu();
 }
