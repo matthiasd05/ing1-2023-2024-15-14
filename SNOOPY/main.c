@@ -1,123 +1,18 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
-#define Longueur 10
-#define Largeur 20
-char Plateau[Longueur][Largeur];
-int SnoopyX,SnoopyY;
-int balleX,balleY;
-int murX,murY;
-int mur_cassableX,mur_cassableY;
-int mur_piegeX,mur_piegeY;
-int oiseauX,oiseauY,oiseau1X,oiseau1Y,oiseau2X,oiseau2Y,oiseau3X,oiseau3Y,test_oiseau,test_oiseau1,test_oiseau2,test_oiseau3;
+#include "fonctions.h"
+
+
 int compteur;
 int droit_pousser;
 int droit_casser;
-int droit_bouger=1;
 int droit_chronometrer=1;
 int vie = 3;
 int score_finale = 0;
 char coeur= '$';
-void plateau(){
-    //On ouvre le fichier contenant notre plateau que l'on va associer à un tableau
-    FILE *fichier;
-    fichier= fopen("niveau1.txt","r");
-    char caractere_lu;
-    signed char texte[Longueur];
-    // On parcourt toutes les cases du tableau
-    for (int i = 0; i < Longueur ; ++i) {
-        for (int j = 0; j <Largeur ; ++j) {
-            //On lit chaque caractère de notre fichier texte et on les compare pour que les différents éléments soient affectés dans le tableau
-            caractere_lu = fgetc(fichier);
-            if(caractere_lu != EOF){
-                if(caractere_lu== '#'){
-                    Plateau[i][j] = '#';
-                    printf("%c",Plateau[i][j]);
-                }
-                else if(caractere_lu=='S'){
-                    SnoopyX = i;
-                    SnoopyY = j;
-                    Plateau[i][j]='S';
-                    printf("%c",Plateau[i][j]);
-
-                }
-                else if(caractere_lu=='B'){
-                    balleX = i;
-                    balleY = j;
-                    Plateau[i][j]='B';
-                    printf("%c",Plateau[i][j]);
-
-                }
-                else if(caractere_lu=='O'){
-                    if(test_oiseau==0){
-                        oiseauX = i;
-                        oiseauY = j;
-                        Plateau[i][j]='O';
-                        printf("%c",Plateau[i][j]);
-                        test_oiseau++;
-                    }
-                    else if(test_oiseau1==0){
-                        oiseau1X = i;
-                        oiseau1Y = j;
-                        Plateau[i][j]='O';
-                        printf("%c",Plateau[i][j]);
-                        test_oiseau1++;
-                    }
-                    else if(test_oiseau2==0){
-                        oiseau2X = i;
-                        oiseau2Y = j;
-                        Plateau[i][j]='O';
-                        printf("%c",Plateau[i][j]);
-                        test_oiseau2++;
-                    }
-                    else if(test_oiseau3==0){
-                        oiseau3X = i;
-                        oiseau3Y = j;
-                        Plateau[i][j]='O';
-                        printf("%c",Plateau[i][j]);
-                        test_oiseau3++;
-                    }
-
-                }
-                else if(caractere_lu=='M'){
-                    murX = i;
-                    murY = j;
-                    Plateau[i][j]='M';
-                    printf("%c",Plateau[i][j]);
-
-                }
-                else if(caractere_lu=='C'){
-                    mur_cassableX = i;
-                    mur_cassableY = j;
-                    Plateau[i][j]='C';
-                    printf("%c",Plateau[i][j]);
-
-                }
-                else if(caractere_lu=='X'){
-                    mur_piegeX = i;
-                    mur_piegeY = j;
-                    Plateau[i][j]='X';
-                    printf("%c",Plateau[i][j]);
-
-                }
-                else if(caractere_lu== ' '){
-                    Plateau[i][j] = ' ';
-                    printf("%c",Plateau[i][j]);
-                }
-            }
-
-        }
-        // On indique jusqu'où il est nécesaaire de lire le fichier
-        fgets(texte,Longueur,fichier);
-        printf("\n");
-    }
-    fclose(fichier);
-}
 int temps_ecoule;
 int temps_restant =120;
-
-
-
 void barre_vie(){
     printf("\n");// Saut a la ligne
     // Affiche le nombre de vies actuelles sous la forme de symboles de dollars
@@ -156,15 +51,6 @@ void chrono(){
     droit_chronometrer = 1;
 
 }
-void scores(){
-    // Le score est en fonction du temps donc on compte les secondes comme dans la fonction précédente
-    temps_ecoule++;
-    Sleep(1000);
-    temps_restant = 120 - temps_ecoule;
-    int score = temps_restant*100;
-    printf("VOTRE SCORE EST DE %d\n\n",score);
-    score_finale=score_finale+score;
-}
 void affichage(){
     // La fonction comme son nom l'indique permet d'afficher les éléments nécessaires à l'écran
     for (int i = 0; i < Longueur; ++i) {
@@ -177,234 +63,16 @@ void affichage(){
     printf("Temps restant : ");
     chrono();
 }
-void sauvegarde(){
-    /*
-     * On va créer un tableau pouvant contenir jusqu'à 50 caractères qui va représenter le nom du fichier créé en 1s
-     */
-    char nomFichier[50];
-    // Invite l'utilisateur à entrer le nom du fichier de sauvegarde
-    printf("Entrez le nom du fichier de sauvegarde : ");
-    // Lit le nom du fichier à partir de l'entrée utilisateur et le stocke dans le tableau nomFichier
-    scanf("%s", nomFichier);
-    // Pause d'une seconde (1000 millisecondes)
+
+void scores(){
+    // Le score est en fonction du temps donc on compte les secondes comme dans la fonction précédente
+    temps_ecoule++;
     Sleep(1000);
-
-    /* On va déclarer vers une structure FILE ce qui va nous permettre de pouvoir réaliser des opérations sur nos fichiers
-     * puis on on ouvre (ici on le crée) et on le lit (w= write)
-     */
-    FILE *fichier_sauvegarde;
-    fichier_sauvegarde = fopen(nomFichier, "w");
-
-    // Cela va donc écrire les positions actuelles des éléments dans le fichier puis le fermer
-    fprintf(fichier_sauvegarde, "Snoopy : (%d, %d)\n", SnoopyX, SnoopyY);
-    fprintf(fichier_sauvegarde, "Oiseau1 : (%d, %d)\n", oiseauX, oiseauY);
-    fprintf(fichier_sauvegarde, "Oiseau2 : (%d, %d)\n", oiseau1X, oiseau1Y);
-    fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau2X, oiseau2Y);
-    fprintf(fichier_sauvegarde, "Oiseau4 : (%d, %d)\n", oiseau3X, oiseau3Y);
-
-    // Ferme le fichier après avoir écrit les informations
-    fclose(fichier_sauvegarde);
-
-    // Affiche un message indiquant que la partie a été sauvegardée dans le fichier spécifié
-    printf("Partie sauvegardee dans le fichier : %s\n", nomFichier);
+    temps_restant = 120 - temps_ecoule;
+    int score = temps_restant*100;
+    printf("VOTRE SCORE EST DE %d\n\n",score);
+    score_finale=score_finale+score;
 }
-
-
-void chargerPartie(const char *nomFichier) {
-    /*
-     * Cette fonction va nous permettre de charger la partie sauvegardée par la fonction d'avant.
-     * Elle utilise la même logique sauf que là nous sommes en mode r (read),
-     * on va donc ressortir les éléments sauvegardés dans le fichier
-     */
-
-    // Ouvre le fichier spécifié en mode lecture (read)
-    FILE *fichier_charge = fopen(nomFichier, "r");
-
-    // Ouvre le fichier "NIVEAU1.txt" en mode lecture (read)
-    FILE *fichier = fopen("NIVEAU1.txt", "r");
-
-    // Variables pour stocker les données lues depuis le fichier
-    int sX, sY, bX, bY, mX, mY, oX, oY, o1X, o1Y, o2X, o2Y, o3X, o3Y;
-
-    // Lire les données du fichier pour restaurer l'état du jeu
-    fscanf(fichier_charge, "Snoopy : (%d, %d)\n", &sX, &sY);
-    fscanf(fichier_charge, "Balle : (%d, %d)\n", &bX, &bY);
-    fscanf(fichier_charge, "Mur : (%d, %d)\n", &mX, &mY);
-    fscanf(fichier_charge, "Oiseau1 : (%d, %d)\n", &oX, &oY);
-    fscanf(fichier_charge, "Oiseau2 : (%d, %d)\n", &o1X, &o1Y);
-    fscanf(fichier_charge, "Oiseau3 : (%d, %d)\n", &o2X, &o2Y);
-    fscanf(fichier_charge, "Oiseau4 : (%d, %d)\n", &o3X, &o3Y);
-
-    // Fermer le fichier après avoir lu les données
-    fclose(fichier_charge);
-
-    // Restaurer les valeurs pour la partie en cours
-    SnoopyX = sX;
-    SnoopyY = sY;
-    balleX = bX;
-    balleY = bY;
-    murX = mX;
-    murY = mY;
-    oiseauX = oX;
-    oiseauY = oY;
-    oiseau1X = o1X;
-    oiseau1Y = o1Y;
-    oiseau2X = o2X;
-    oiseau2Y = o2Y;
-    oiseau3X = o3X;
-    oiseau3Y = o3Y;
-
-    // Met à jour le plateau avec les positions des éléments chargés
-    Plateau[SnoopyX][SnoopyY] = 'S';
-    Plateau[balleX][balleY] = 'B';
-    Plateau[murX][murY] = 'M';
-    Plateau[oiseauX][oiseauY] = 'O';
-    Plateau[oiseau1X][oiseau1Y] = 'O';
-    Plateau[oiseau2X][oiseau2Y] = 'O';
-    Plateau[oiseau3X][oiseau3Y] = 'O';
-}
-
-
-void murCassable(){
-    // Vérifie si le joueur a le droit de casser un mur
-    if(droit_casser==1){
-        // Vérifie si Snoopy est à côté d'un mur cassable (en haut)
-        if(Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
-            // Casse le mur en mettant à jour la case correspondante dans le plateau
-            Plateau[mur_cassableX][mur_cassableY]=' ';
-        }
-            // Vérifie si Snoopy est à côté d'un mur cassable (en dessous)
-        else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
-            // Casse le mur en mettant à jour la case correspondante dans le plateau
-            Plateau[mur_cassableX][mur_cassableY]=' ';
-        }
-            // Vérifie si Snoopy est à côté d'un mur cassable (a droite)
-        else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-            // Casse le mur en mettant à jour la case correspondante dans le plateau
-            Plateau[mur_cassableX][mur_cassableY]=' ';
-        }
-            // Vérifie si Snoopy est à côté d'un mur cassable (a gauche)
-        else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-            // Casse le mur en mettant à jour la case correspondante dans le plateau
-            Plateau[mur_cassableX][mur_cassableY]=' ';
-        }
-    }
-}
-
-
-void mur(){
-    static int droit_bouger=0;
-    //Vérifie si le joueur a le droit de bouger un mur
-    if(droit_bouger==0){
-        //Vérifie si Snoopy est à côté d'un mur poussable (en haut)
-        if(Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY] && droit_bouger==0){
-            Plateau[murX][murY]=' ' ;
-            //Remplace l'ancienne case par un espace vide
-            murY++;
-            //Ajoute 1 à la coordonnée en Y (ordonnée du mur)
-            Plateau[murX][murY]= 'M';
-            //Mets la lettre M sur la nouvelle case
-            droit_bouger=1;
-        }
-        droit_pousser=1;
-    }
-
-}
-void touches(/*char commande*/){
-    if(kbhit()==1){
-        /*int commande = getch();// commende est en int car char ne peut contenir dde chiffre et il est necessaire d'avoir des chivres pour les flèches
-        touches(commande);*/
-        if (droit_bouger == 1){
-            // La fonction s'occupe des déplacements, elle est appelée suite à la fnction getch qui détete l'appui du touche et permet donc les différents déplacements
-            switch (_getch()/*commande*/) {
-                case 's':{
-                    //Appel de la fonction sauvegarde
-                    sauvegarde();
-                    break;
-                }
-                case'p':{
-                    int reprendre =_getch();
-                    if(reprendre=='p'){
-                        droit_bouger = 1;
-                    }
-                    break;
-                }
-                case'c':{
-                    droit_casser=1;
-                    murCassable();
-                    break;
-                }
-                case 72:{
-                    if( SnoopyX-1>0){
-                        //Permet d'éviter que Snoopy avance lorsqu'il n'a pas le droit
-                        if(droit_pousser>=1  && Plateau[SnoopyX-1][SnoopyY]==Plateau[murX][murY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else if(droit_casser==0 && Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                            // Si Snoopy peut se déplacer alors il n'y a qu'à effacer sa position puis l'afficher àla position suivante
-                        else{
-                            Plateau[SnoopyX][SnoopyY] = ' ';
-                            SnoopyX--;
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                    }
-                }
-                    break;
-                case 80:{
-                    if(SnoopyX+1<Longueur-1){
-                        if(droit_pousser>=1 &&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else{
-                            Plateau[SnoopyX][SnoopyY] = ' ';
-                            SnoopyX++;
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                    }
-                }
-                    break;
-                case 75:{
-                    if(SnoopyY-1>0){
-                        if(droit_pousser>=1 && Plateau[SnoopyX][SnoopyY-1]==Plateau[murX][murY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else{
-                            Plateau[SnoopyX][SnoopyY] = ' ';
-                            SnoopyY--;
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                    }
-                }
-                    break;
-                case 77:{
-                    if(SnoopyY+1<Largeur-1){
-                        if(droit_pousser>=1&& Plateau[SnoopyX][SnoopyY+1]==Plateau[murX][murY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else if(droit_casser==0 && Plateau[SnoopyX][SnoopyY+1]==Plateau[mur_cassableX][mur_cassableY]){
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                        else{
-                            Plateau[SnoopyX][SnoopyY] = ' ';
-                            SnoopyY++;
-                            Plateau[SnoopyX][SnoopyY] = 'S';
-                        }
-                    }
-                }
-                    break;
-            }
-        }
-    }
-}
-
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
 void oiseau(){
     // Vérifie si Snoopy est sur la même case qu'un oiseau et si cet oiseau n'a pas encore été rencontré
@@ -482,14 +150,15 @@ void boucle(){
         balle();
         mur();
         murCassable();
-        /*
         if(kbhit()){
-            int commande = _getch();// commende est en int car char ne peut contenir dde chiffre et il est necessaire d'avoir des chivres pour les flèches
+            char commande = _getch();
             touches(commande);
-        }*/
+        }
 
     }
 }
+
+
 int continuer = 1;
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
@@ -598,13 +267,38 @@ void menu(){
                 printf("Bravo vous avez reussi le niveau !!");
                 scores();
                 Sleep(1000);
-                printf("EN ATTENTE DU PROCHAIN NIVEAU");
-                Sleep(3000);
-                temps_ecoule = 0;
-                compteur = 0;
                 droit_bouger=0;
                 droit_pousser = 0;
-                vie = 3;
+                temps_ecoule = 0;
+                plateau();
+                while(vie>0&& compteur<8){
+                    affichage();
+                    system("CLS");
+                    oiseau();
+                    balle();
+                    mur();
+                    murCassable();
+                    if(kbhit()){
+                        // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                        char commande = _getch();
+                        if (commande == 'p'){
+                            droit_chronometrer = 0;
+                            droit_bouger = 0;
+                            printf("Vous etes en pause");
+                            menu();
+                            printf("\n Appuyer sur n'importe quelle touche : ");
+                            droit_bouger = 1;
+                            droit_chronometrer = 1;
+                        }
+                        else if(commande == 's'){
+                            sauvegarde();
+                            menu();
+                        }
+                        // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                        touches(commande);
+                    }
+                }
+
             }
             else if (vie<=0 ){
                 // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
@@ -680,6 +374,6 @@ void menu(){
     }
 }
 // On met notre menu qui regroupe lui-même toutes les fonctions dans le main
-int main() {
+int main(){
     menu();
 }
