@@ -142,7 +142,7 @@ void balle(){
 
 void boucle(){
     // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
-    plateau();
+    plateau("niveau1.txt");
     while (1){
         system("CLS");
         affichage();
@@ -158,7 +158,15 @@ void boucle(){
     }
 }
 
+void reinitialiser() {
+    SnoopyX = SnoopyY = balleX = balleY = oiseauX = oiseauY = oiseau1X = oiseau1Y = oiseau2X = oiseau2Y = oiseau3X = oiseau3Y = murX = murY = mur_cassableX = mur_cassableY = mur_piegeX = mur_piegeY = 0;
 
+    for (int i = 0; i < Longueur; ++i) {
+        for (int j = 0; j < Largeur; ++j) {
+            Plateau[i][j] = ' ';
+        }
+    }
+}
 int continuer = 1;
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
@@ -231,7 +239,7 @@ void menu(){
         }
         case 2:{
             //Le fait d'appuyer sur 2 vanous afficher notre fichier texte qui est alors devenu un tableaau
-            plateau();
+           plateau("niveau1.txt");
             while (vie>0&& compteur<4){
                 // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
                 system("CLS");
@@ -261,6 +269,7 @@ void menu(){
                     // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
                     touches(commande);
                 }
+
             }
             if (compteur == 4) {
                 //On indique à l'utilisateur qu'il a fini le niveau en lui annoçant son score puis par la suite, il accédera au niveau 2
@@ -270,7 +279,12 @@ void menu(){
                 droit_bouger=0;
                 droit_pousser = 0;
                 temps_ecoule = 0;
-                plateau();
+                reinitialiser();
+                Plateau[oiseauX][oiseauY] = 'O';
+                Plateau[oiseau1X][oiseau1Y] = 'O';
+                Plateau[oiseau2X][oiseau2Y] = 'O';
+                Plateau[oiseau3X][oiseau3Y] = 'O';
+                plateau("niveau2.txt");
                 while(vie>0&& compteur<8){
                     affichage();
                     system("CLS");
@@ -366,6 +380,7 @@ void menu(){
         }
         case 5:{
             printf("Votre score actuel est de %d",score_finale);
+            break;
         }
         case 6:{
             printf("Vous avez fini");

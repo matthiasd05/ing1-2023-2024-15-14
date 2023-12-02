@@ -6,21 +6,25 @@ void murCassable(){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
+
             // Vérifie si Snoopy est à côté d'un mur cassable (en dessous)
         else if(Plateau[SnoopyX][SnoopyY-1]==Plateau[mur_cassableX][mur_cassableY]){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
+
             // Vérifie si Snoopy est à côté d'un mur cassable (a droite)
         else if(Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
+
             // Vérifie si Snoopy est à côté d'un mur cassable (a gauche)
         else if(Plateau[SnoopyX-1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
             // Casse le mur en mettant à jour la case correspondante dans le plateau
             Plateau[mur_cassableX][mur_cassableY]=' ';
         }
+
     }
 }
 
