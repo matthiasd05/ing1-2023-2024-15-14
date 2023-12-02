@@ -1,3 +1,4 @@
+
 void sauvegarde(){
     /*
      * On va créer un tableau pouvant contenir jusqu'à 50 caractères qui va représenter le nom du fichier créé en 1s
@@ -32,48 +33,21 @@ void sauvegarde(){
 
 
 void chargerPartie(const char *nomFichier) {
-    /*
-     * Cette fonction va nous permettre de charger la partie sauvegardée par la fonction d'avant.
-     * Elle utilise la même logique sauf que là nous sommes en mode r (read),
-     * on va donc ressortir les éléments sauvegardés dans le fichier
-     */
-
-    // Ouvre le fichier spécifié en mode lecture (read)
-    FILE *fichier_charge = fopen(nomFichier, "r");
-
-    // Ouvre le fichier "NIVEAU1.txt" en mode lecture (read)
-    FILE *fichier = fopen("NIVEAU1.txt", "r");
-
-    // Variables pour stocker les données lues depuis le fichier
-    int sX, sY, bX, bY, mX, mY, oX, oY, o1X, o1Y, o2X, o2Y, o3X, o3Y;
+    FILE *fichier_charge;
+    fichier_charge = fopen(nomFichier,"r");
 
     // Lire les données du fichier pour restaurer l'état du jeu
-    fscanf(fichier_charge, "Snoopy : (%d, %d)\n", &sX, &sY);
-    fscanf(fichier_charge, "Balle : (%d, %d)\n", &bX, &bY);
-    fscanf(fichier_charge, "Mur : (%d, %d)\n", &mX, &mY);
-    fscanf(fichier_charge, "Oiseau1 : (%d, %d)\n", &oX, &oY);
-    fscanf(fichier_charge, "Oiseau2 : (%d, %d)\n", &o1X, &o1Y);
-    fscanf(fichier_charge, "Oiseau3 : (%d, %d)\n", &o2X, &o2Y);
-    fscanf(fichier_charge, "Oiseau4 : (%d, %d)\n", &o3X, &o3Y);
+    fscanf(fichier_charge, "Snoopy : (%d, %d)\n", &SnoopyX, &SnoopyY);
+    fscanf(fichier_charge, "Balle : (%d, %d)\n", &balleX, &balleY);
+    fscanf(fichier_charge, "Mur : (%d, %d)\n", &murX, &murY);
+    fscanf(fichier_charge, "Oiseau1 : (%d, %d)\n", &oiseauX, &oiseauY);
+    fscanf(fichier_charge, "Oiseau2 : (%d, %d)\n", &oiseau1X, &oiseau1Y);
+    fscanf(fichier_charge, "Oiseau3 : (%d, %d)\n", &oiseau2X, &oiseau2Y);
+    fscanf(fichier_charge, "Oiseau4 : (%d, %d)\n", &oiseau3X, &oiseau3Y);
 
     // Fermer le fichier après avoir lu les données
     fclose(fichier_charge);
 
-    // Restaurer les valeurs pour la partie en cours
-    SnoopyX = sX;
-    SnoopyY = sY;
-    balleX = bX;
-    balleY = bY;
-    murX = mX;
-    murY = mY;
-    oiseauX = oX;
-    oiseauY = oY;
-    oiseau1X = o1X;
-    oiseau1Y = o1Y;
-    oiseau2X = o2X;
-    oiseau2Y = o2Y;
-    oiseau3X = o3X;
-    oiseau3Y = o3Y;
 
     // Met à jour le plateau avec les positions des éléments chargés
     Plateau[SnoopyX][SnoopyY] = 'S';

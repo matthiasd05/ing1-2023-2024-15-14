@@ -75,8 +75,15 @@ void scores(){
 }
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
 void oiseau(){
+    if (compte_oiseau1 == 1 && compte_oiseau2 == 1 && compte_oiseau3 == 1 && compte_oiseau4 == 1) {
+        compte_oiseau1 = 0;
+        compte_oiseau2 = 0;
+        compte_oiseau3 = 0;
+        compte_oiseau4 = 0;
+
+    }
     // Vérifie si Snoopy est sur la même case qu'un oiseau et si cet oiseau n'a pas encore été rencontré
-    if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseauX][oiseauY] && compte_oiseau1 == 0){
+    else if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseauX][oiseauY] && compte_oiseau1 == 0){
         // Affiche un message indiquant que Snoopy a rencontré un oiseau
         printf("Vous avez un oiseau\n");
         // Incrémente le compteur global des rencontres d'oiseaux
@@ -139,10 +146,9 @@ void balle(){
 
 }
 
-
-void boucle(){
+void boucle(const char * nomFichier){
     // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
-    plateau("niveau1.txt");
+    plateau(nomFichier);
     while (1){
         system("CLS");
         affichage();
@@ -158,15 +164,6 @@ void boucle(){
     }
 }
 
-void reinitialiser() {
-    SnoopyX = SnoopyY = balleX = balleY = oiseauX = oiseauY = oiseau1X = oiseau1Y = oiseau2X = oiseau2Y = oiseau3X = oiseau3Y = murX = murY = mur_cassableX = mur_cassableY = mur_piegeX = mur_piegeY = 0;
-
-    for (int i = 0; i < Longueur; ++i) {
-        for (int j = 0; j < Largeur; ++j) {
-            Plateau[i][j] = ' ';
-        }
-    }
-}
 int continuer = 1;
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix
 void menu(){
@@ -239,7 +236,7 @@ void menu(){
         }
         case 2:{
             //Le fait d'appuyer sur 2 vanous afficher notre fichier texte qui est alors devenu un tableaau
-           plateau("niveau1.txt");
+            plateau("niveau1.txt");
             while (vie>0&& compteur<4){
                 // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
                 system("CLS");
@@ -279,40 +276,39 @@ void menu(){
                 droit_bouger=0;
                 droit_pousser = 0;
                 temps_ecoule = 0;
-                reinitialiser();
+                Plateau[SnoopyX][SnoopyY] = ' ';
+                Plateau[murX][murY] = 'M';
+                Plateau[balleX][balleY] = 'B';
+                Plateau[mur_cassableX][mur_cassableY] = 'C';
+                Plateau[mur_piegeX][mur_piegeY] = 'X';
                 Plateau[oiseauX][oiseauY] = 'O';
                 Plateau[oiseau1X][oiseau1Y] = 'O';
                 Plateau[oiseau2X][oiseau2Y] = 'O';
                 Plateau[oiseau3X][oiseau3Y] = 'O';
-                plateau("niveau2.txt");
                 while(vie>0&& compteur<8){
-                    affichage();
-                    system("CLS");
-                    oiseau();
-                    balle();
-                    mur();
-                    murCassable();
-                    if(kbhit()){
-                        // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
-                        char commande = _getch();
-                        if (commande == 'p'){
-                            droit_chronometrer = 0;
-                            droit_bouger = 0;
-                            printf("Vous etes en pause");
-                            menu();
-                            printf("\n Appuyer sur n'importe quelle touche : ");
-                            droit_bouger = 1;
-                            droit_chronometrer = 1;
-                        }
-                        else if(commande == 's'){
-                            sauvegarde();
-                            menu();
-                        }
-                        // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
-                        touches(commande);
-                    }
+                    boucle("niveau2.txt");
                 }
 
+            }
+            else if(compteur == 8){
+                printf("Bravo vous avez reussi le niveau !!");
+                scores();
+                Sleep(1000);
+                droit_bouger=0;
+                droit_pousser = 0;
+                temps_ecoule = 0;
+                Plateau[SnoopyX][SnoopyY] = ' ';
+                Plateau[murX][murY] = 'M';
+                Plateau[balleX][balleY] = 'B';
+                Plateau[mur_cassableX][mur_cassableY] = 'C';
+                Plateau[mur_piegeX][mur_piegeY] = 'X';
+                Plateau[oiseauX][oiseauY] = 'O';
+                Plateau[oiseau1X][oiseau1Y] = 'O';
+                Plateau[oiseau2X][oiseau2Y] = 'O';
+                Plateau[oiseau3X][oiseau3Y] = 'O';
+                while(vie>0&& compteur<12){
+                    boucle("niveau3.txt");
+                }
             }
             else if (vie<=0 ){
                 // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
@@ -352,7 +348,13 @@ void menu(){
             printf("Entrez le nom du fichier de sauvegarde à charger : ");
             scanf("%s", nomFichier);
             chargerPartie(nomFichier);
-            boucle();
+            if (compteur<4){
+                boucle("niveau1.txt");
+            }
+            else{
+                boucle("niveau2.txt");
+            }
+
             break;
 
         }
@@ -364,12 +366,47 @@ void menu(){
                 printf("Entrer le mode passe: ");
                 scanf("%s",mdp);
                 if(strcmp(mdp,"NIVEAU1")==0){
-                    boucle();
-                }
-                else if(strcmp(mdp,"NIVEAU2")==0){
+                    while(compteur <4){
+                        boucle("niveau1.txt");
+                    }
+                    while(compteur <8){
+                        boucle("niveau2.txt");
+                    }
+                    while(compteur <12){
+                        boucle("niveau3.txt");
+                    }
+                    while(compteur <16){
+                        boucle("niveau3.txt");
+                    }
+                    printf("Vous avez fini");
 
                 }
+                else if(strcmp(mdp,"NIVEAU2")==0){
+                    while(compteur <4){
+                        boucle("niveau2.txt");
+                    }
+                    while(compteur <8){
+                        boucle("niveau3.txt");
+                    }
+                    while(compteur <12){
+                        boucle("niveau4.txt");
+                    }
+                    printf("Vous avez fini");
+                }
                 else if(strcmp(mdp,"NIVEAU3")==0){
+                    while(compteur <4){
+                        boucle("niveau3.txt");
+                    }
+                    while(compteur <8){
+                        boucle("niveau4.txt");
+                    }
+                    printf("Vous avez fini");
+                }
+                else if(strcmp(mdp,"NIVEAU4")==0){
+                    while(compteur <4){
+                        boucle("niveau4.txt");
+                    }
+                    printf("Vous avez fini");
 
                 }
                 printf("Ce n'est pas le bon mot de passe.\n Voulez vous reessayer Non:0/ Oui:1");

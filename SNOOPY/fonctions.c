@@ -16,7 +16,6 @@ int droit_bouger=1;
 int droit_pousser;
 
 void touches(char commande){
-    if (droit_bouger == 1){
         // La fonction s'occupe des déplacements, elle est appelée suite à la fnction getch qui détete l'appui du touche et permet donc les différents déplacements
         switch (commande) {
             case 'r':{
@@ -106,5 +105,5 @@ void touches(char commande){
                 break;
             }
         }
-    }
+    
 }
