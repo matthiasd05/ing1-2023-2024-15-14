@@ -1,10 +1,10 @@
 ####################
 #O                O#
-#    MMMMM    M    #
+#    M MMM    M    #
 #                  #
 #B            X    #
-#     MMMMMMMMMMMMM#
+#     MM MMMMMMMMM #
 #    C             #
-# MMMMM    S       #
-#O                O#
+# MM M    S        #
+#O            B   O#
 #################### 

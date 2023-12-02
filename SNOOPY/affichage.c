@@ -5,7 +5,7 @@
 #define Largeur 20
 char Plateau[Longueur][Largeur];
 int SnoopyX,SnoopyY;
-int balleX,balleY;
+int balleX,balleY,balle1X,balle1Y,test_balle;
 int murX,murY;
 int mur_cassableX,mur_cassableY;
 int mur_piegeX,mur_piegeY;
@@ -35,11 +35,19 @@ void plateau(const char *NOMfichier){
 
                     }
                     else if(caractere_lu=='B'){
-                        balleX = i;
-                        balleY = j;
-                        Plateau[i][j]='B';
-                        printf("%c",Plateau[i][j]);
-
+                        if(test_balle==0){
+                            balleX = i;
+                            balleY = j;
+                            Plateau[i][j]='B';
+                            printf("%c",Plateau[i][j]);
+                            test_balle++;
+                        }
+                        else{
+                            balle1X = i;
+                            balle1Y = j;
+                            Plateau[i][j]='B';
+                            printf("%c",Plateau[i][j]);
+                        }
                     }
                     else if(caractere_lu=='O'){
                         if(test_oiseau==0){

@@ -28,7 +28,6 @@ void murCassable(){
     }
 }
 
-
 void mur(){
     static int droit_bouger=0;
     //Vérifie si le joueur a le droit de bouger un mur
