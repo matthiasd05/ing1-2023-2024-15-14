@@ -578,47 +578,435 @@ void menu(){
                 printf("Entrer le mode passe: ");
                 scanf("%s",mdp);
                 if(strcmp(mdp,"NIVEAU1")==0){
-                    while(compteur <4){
-                        boucle("niveau1.txt");
+                    plateau("niveau1.txt");
+                    while (vie>0&& compteur<4){
+                        // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
+
                     }
-                    while(compteur <8){
-                        boucle("niveau2.txt");
+                    //On indique à l'utilisateur qu'il a fini le niveau en lui annoçant son score puis par la suite, il accédera au niveau 2
+                    if(vie>0){
+                        printf("Bravo vous avez reussi le niveau !!\n");
+                        scores();
+                        Sleep(1000);
+                        reinitialiser();
                     }
-                    while(compteur <12){
-                        boucle("niveau3.txt");
+                    plateau("niveau2.txt");
+                    while(vie>0&& compteur<8){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
                     }
-                    while(compteur <16){
-                        boucle("niveau3.txt");
+                    if(vie>0){
+                        printf("Bravo vous avez reussi le niveau !!\n");
+                        scores();
+                        Sleep(1000);
+                        reinitialiser();
+
                     }
-                    printf("Vous avez fini");
+                    plateau("niveau3.txt");
+
+                    while(vie>0&& compteur<12){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
+                    }
+                    if(vie>0){
+                        printf("Bravo vous avez reussi le niveau !!\n");
+                        scores();
+                        Sleep(1000);
+                        reinitialiser();
+                        plateau("niveau4.txt");
+                    }
+
+                    while(vie>0&& compteur<16){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
+                    }
+                    if (compteur == 16){
+                        printf("\nBRAVO VOUS AVEZ FINI LE JEU ");
+                        Sleep(5000);
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+
+                    if (vie<=0 ){
+                        // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
+                        printf("\n\nGAME OVER\n\n");
+                        Sleep(500);
+                        vie = 3;
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+                    continuer = 1;
 
                 }
                 else if(strcmp(mdp,"NIVEAU2")==0){
-                    while(compteur <4){
-                        boucle("niveau2.txt");
+                    compteur = 4;
+                    plateau("niveau2.txt");
+                    while(vie>0&& compteur<8){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
                     }
-                    while(compteur <8){
-                        boucle("niveau3.txt");
+                    if(vie>0){
+                        printf("Bravo vous avez reussi le niveau !!\n");
+                        scores();
+                        Sleep(1000);
+                        reinitialiser();
+
                     }
-                    while(compteur <12){
-                        boucle("niveau4.txt");
+                    plateau("niveau3.txt");
+
+                    while(vie>0&& compteur<12){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
                     }
-                    printf("Vous avez fini");
+                    if(vie>0){
+                        printf("Bravo vous avez reussi le niveau !!\n");
+                        scores();
+                        Sleep(1000);
+                        reinitialiser();
+                        plateau("niveau4.txt");
+                    }
+
+                    while(vie>0&& compteur<16){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
+                    }
+                    if (compteur == 16){
+                        printf("\nBRAVO VOUS AVEZ FINI LE JEU ");
+                        Sleep(5000);
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+
+                    if (vie<=0 ){
+                        // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
+                        printf("\n\nGAME OVER\n\n");
+                        Sleep(500);
+                        vie = 3;
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+                    continuer = 1;
                 }
                 else if(strcmp(mdp,"NIVEAU3")==0){
-                    while(compteur <4){
-                        boucle("niveau3.txt");
+                    compteur = 8;
+                    plateau("niveau3.txt");
+
+                    while(vie>0&& compteur<12){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
                     }
-                    while(compteur <8){
-                        boucle("niveau4.txt");
+                    if(vie>0){
+                        printf("Bravo vous avez reussi le niveau !!\n");
+                        scores();
+                        Sleep(1000);
+                        reinitialiser();
+                        plateau("niveau4.txt");
                     }
-                    printf("Vous avez fini");
+
+                    while(vie>0&& compteur<16){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
+                    }
+                    if (compteur == 16){
+                        printf("\nBRAVO VOUS AVEZ FINI LE JEU ");
+                        Sleep(5000);
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+
+                    if (vie<=0 ){
+                        // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
+                        printf("\n\nGAME OVER\n\n");
+                        Sleep(500);
+                        vie = 3;
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+                    continuer = 1;
                 }
                 else if(strcmp(mdp,"NIVEAU4")==0){
-                    while(compteur <4){
-                        boucle("niveau4.txt");
+                    compteur = 12;
+                    plateau("niveau4.txt");
+                    while(vie>0&& compteur<16){
+                        system("CLS");
+                        affichage();
+                        //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                        oiseau();
+                        balle();
+                        mur();
+                        murCassable();
+                        // La commande suivante va vérifier s'il y a eu une détection des touches
+                        if(kbhit()){
+                            // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                            char commande = _getch();
+                            if (commande == 'p'){
+                                droit_chronometrer = 0;
+                                droit_bouger = 0;
+                                printf("Vous etes en pause");
+                                menu();
+                                printf("\n Appuyer sur n'importe quelle touche : ");
+                                droit_bouger = 1;
+                                droit_chronometrer = 1;
+                            }
+                            else if(commande == 's'){
+                                sauvegarde();
+                                menu();
+                            }
+                            // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                            touches(commande);
+                        }
                     }
-                    printf("Vous avez fini");
+                    if (compteur == 16){
+                        printf("\nBRAVO VOUS AVEZ FINI LE JEU ");
+                        Sleep(5000);
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+
+                    if (vie<=0 ){
+                        // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
+                        printf("\n\nGAME OVER\n\n");
+                        Sleep(500);
+                        vie = 3;
+                        reinitialiser();
+                        compteur = 0;
+                        menu();
+                    }
+                    continuer = 1;
 
                 }
                 printf("Ce n'est pas le bon mot de passe.\n Voulez vous reessayer Non:0/ Oui:1");
@@ -636,7 +1024,7 @@ void menu(){
             break;
         }
         case 6:{
-            printf("Vous avez fini");
+            printf("Vous avez decidez de quitter.");
             break;
         }
     }
