@@ -145,7 +145,6 @@ void balle(){
 
 }
 
-
 void reinitialiser(){
     droit_bouger=0;
     droit_pousser = 0;
@@ -154,12 +153,6 @@ void reinitialiser(){
     compte_oiseau2 = 0;
     compte_oiseau3 = 0;
     compte_oiseau4 = 0;
-    decalage_1=0;
-    decalage_2=0;
-    decalage_3=0;
-    decalage_4=0;
-    balleX = 4;
-    balleY = 1;
     trouver = 0;
     Plateau[SnoopyX][SnoopyY] = ' ';
     Plateau[murX][murY] = 'M';
@@ -718,7 +711,6 @@ void menu(){
                         Sleep(5000);
                         reinitialiser();
                         compteur = 0;
-                        vie = 3;
                         menu();
                     }
 
@@ -846,7 +838,6 @@ void menu(){
                         Sleep(5000);
                         reinitialiser();
                         compteur = 0;
-                        vie =3;
                         menu();
                     }
 
@@ -936,7 +927,6 @@ void menu(){
                         Sleep(5000);
                         reinitialiser();
                         compteur = 0;
-                        vie = 3;
                         menu();
                     }
 
@@ -988,7 +978,6 @@ void menu(){
                         Sleep(5000);
                         reinitialiser();
                         compteur = 0;
-                        vie = 3;
                         menu();
                     }
 
