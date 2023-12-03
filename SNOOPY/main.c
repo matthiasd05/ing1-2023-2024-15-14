@@ -443,15 +443,146 @@ void menu(){
         case 3:{
             // On associe le nom du fichier à une chaine d'au plus 50 caractères et on appelle alors la fonction prévue pour la sauvegarde
             char nomFichier[50];
-            printf("Entrez le nom du fichier de sauvegarde à charger : ");
+            printf("Entrez le nom du fichier de sauvegarde a charger : ");
             scanf("%s", nomFichier);
             chargerPartie(nomFichier);
             if (compteur<4){
-                boucle("niveau1.txt");
+                plateau(nomFichier);
+                while (vie>0&& compteur<4){
+                    // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
+                    system("CLS");
+                    affichage();
+                    //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                    oiseau();
+                    balle();
+                    mur();
+                    murCassable();
+                    // La commande suivante va vérifier s'il y a eu une détection des touches
+                    if(kbhit()){
+                        // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                        char commande = _getch();
+                        if (commande == 'p'){
+                            droit_chronometrer = 0;
+                            droit_bouger = 0;
+                            printf("Vous etes en pause");
+                            menu();
+                            printf("\n Appuyer sur n'importe quelle touche : ");
+                            droit_bouger = 1;
+                            droit_chronometrer = 1;
+                        }
+                        else if(commande == 's'){
+                            sauvegarde();
+                            menu();
+                        }
+                        // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                        touches(commande);
+                    }
+
+                }
             }
-            else{
-                boucle("niveau2.txt");
+            else if(compteur<8){
+                plateau(nomFichier);
+                while (vie>0&& compteur<8){
+                    // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
+                    system("CLS");
+                    affichage();
+                    //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                    oiseau();
+                    balle();
+                    mur();
+                    murCassable();
+                    // La commande suivante va vérifier s'il y a eu une détection des touches
+                    if(kbhit()){
+                        // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                        char commande = _getch();
+                        if (commande == 'p'){
+                            droit_chronometrer = 0;
+                            droit_bouger = 0;
+                            printf("Vous etes en pause");
+                            menu();
+                            printf("\n Appuyer sur n'importe quelle touche : ");
+                            droit_bouger = 1;
+                            droit_chronometrer = 1;
+                        }
+                        else if(commande == 's'){
+                            sauvegarde();
+                            menu();
+                        }
+                        // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                        touches(commande);
+                    }
+
+                }
             }
+            else if(compteur<12){
+                plateau(nomFichier);
+                while (vie>0&& compteur<12){
+                    // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
+                    system("CLS");
+                    affichage();
+                    //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                    oiseau();
+                    balle();
+                    mur();
+                    murCassable();
+                    // La commande suivante va vérifier s'il y a eu une détection des touches
+                    if(kbhit()){
+                        // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                        char commande = _getch();
+                        if (commande == 'p'){
+                            droit_chronometrer = 0;
+                            droit_bouger = 0;
+                            printf("Vous etes en pause");
+                            menu();
+                            printf("\n Appuyer sur n'importe quelle touche : ");
+                            droit_bouger = 1;
+                            droit_chronometrer = 1;
+                        }
+                        else if(commande == 's'){
+                            sauvegarde();
+                            menu();
+                        }
+                        // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                        touches(commande);
+                    }
+
+                }
+            }
+            else if(compteur<16){
+                plateau(nomFichier);
+                while (vie>0&& compteur<16){
+                    // Une boucle se met en route pour pouvoir jouer tant que les conditions sont réunies et le cls permet d'actualiser à chaque fois l'écran
+                    system("CLS");
+                    affichage();
+                    //Appel de toutes les fonctions annexes permettant une bonne exécution du jeu
+                    oiseau();
+                    balle();
+                    mur();
+                    murCassable();
+                    // La commande suivante va vérifier s'il y a eu une détection des touches
+                    if(kbhit()){
+                        // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
+                        char commande = _getch();
+                        if (commande == 'p'){
+                            droit_chronometrer = 0;
+                            droit_bouger = 0;
+                            printf("Vous etes en pause");
+                            menu();
+                            printf("\n Appuyer sur n'importe quelle touche : ");
+                            droit_bouger = 1;
+                            droit_chronometrer = 1;
+                        }
+                        else if(commande == 's'){
+                            sauvegarde();
+                            menu();
+                        }
+                        // Si les touches appuyées sont différentes de celles précisées alors ce sont celles définies dans la fonction prévue
+                        touches(commande);
+                    }
+
+                }
+            }
+
 
             break;
 

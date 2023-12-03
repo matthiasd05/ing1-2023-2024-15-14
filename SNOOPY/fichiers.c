@@ -17,12 +17,26 @@ void sauvegarde(){
     FILE *fichier_sauvegarde;
     fichier_sauvegarde = fopen(nomFichier, "w");
 
+    fprintf(fichier_sauvegarde,"%d ",SnoopyX);
+    fprintf(fichier_sauvegarde,"%d ",SnoopyY);
+    fprintf(fichier_sauvegarde,"%d ",murX);
+    fprintf(fichier_sauvegarde,"%d ",murY);
+    fprintf(fichier_sauvegarde,"%d ",mur_cassableX);
+    fprintf(fichier_sauvegarde,"%d ",mur_cassableY);
+    fprintf(fichier_sauvegarde,"%d ",mur_piegeX);
+    fprintf(fichier_sauvegarde,"%d ",mur_piegeY);
+    fprintf(fichier_sauvegarde,"%d ",balleX);
+    fprintf(fichier_sauvegarde,"%d ",balleY);
+    fprintf(fichier_sauvegarde,"%d ",oiseauX);
+    fprintf(fichier_sauvegarde,"%d ",oiseauY);
+    fprintf(fichier_sauvegarde,"%d ",oiseau1X);
+    fprintf(fichier_sauvegarde,"%d ",oiseau1Y);
+    fprintf(fichier_sauvegarde,"%d ",oiseau2X);
+    fprintf(fichier_sauvegarde,"%d ",oiseau2Y);
+    fprintf(fichier_sauvegarde,"%d ",oiseau3X);
+    fprintf(fichier_sauvegarde,"%d ",oiseau3Y);
+
     // Cela va donc écrire les positions actuelles des éléments dans le fichier puis le fermer
-    fprintf(fichier_sauvegarde, "Snoopy : (%d, %d)\n", SnoopyX, SnoopyY);
-    fprintf(fichier_sauvegarde, "Oiseau1 : (%d, %d)\n", oiseauX, oiseauY);
-    fprintf(fichier_sauvegarde, "Oiseau2 : (%d, %d)\n", oiseau1X, oiseau1Y);
-    fprintf(fichier_sauvegarde, "Oiseau3 : (%d, %d)\n", oiseau2X, oiseau2Y);
-    fprintf(fichier_sauvegarde, "Oiseau4 : (%d, %d)\n", oiseau3X, oiseau3Y);
 
     // Ferme le fichier après avoir écrit les informations
     fclose(fichier_sauvegarde);
@@ -37,25 +51,46 @@ void chargerPartie(const char *nomFichier) {
     fichier_charge = fopen(nomFichier,"r");
 
     // Lire les données du fichier pour restaurer l'état du jeu
-    fscanf(fichier_charge, "Snoopy : (%d, %d)\n", &SnoopyX, &SnoopyY);
-    fscanf(fichier_charge, "Balle : (%d, %d)\n", &balleX, &balleY);
-    fscanf(fichier_charge, "Mur : (%d, %d)\n", &murX, &murY);
-    fscanf(fichier_charge, "Oiseau1 : (%d, %d)\n", &oiseauX, &oiseauY);
-    fscanf(fichier_charge, "Oiseau2 : (%d, %d)\n", &oiseau1X, &oiseau1Y);
-    fscanf(fichier_charge, "Oiseau3 : (%d, %d)\n", &oiseau2X, &oiseau2Y);
-    fscanf(fichier_charge, "Oiseau4 : (%d, %d)\n", &oiseau3X, &oiseau3Y);
+
+    fscanf(fichier_charge,"%d ",&SnoopyX);
+    fscanf(fichier_charge,"%d ",&SnoopyY);
+    fscanf(fichier_charge,"%d ",&murX);
+    fscanf(fichier_charge,"%d ",&murY);
+    fscanf(fichier_charge,"%d ",&mur_cassableX);
+    fscanf(fichier_charge,"%d ",&mur_cassableY);
+    fscanf(fichier_charge,"%d ",&mur_piegeX);
+    fscanf(fichier_charge,"%d ",&mur_piegeY);
+
+    fscanf(fichier_charge,"%d ",&oiseauX);
+    fscanf(fichier_charge,"%d ",&oiseauY);
+    fscanf(fichier_charge,"%d ",&oiseau1X);
+    fscanf(fichier_charge,"%d ",&oiseau1Y);
+    fscanf(fichier_charge,"%d ",&oiseau2X);
+    fscanf(fichier_charge,"%d ",&oiseau2Y);
+    fscanf(fichier_charge,"%d ",&oiseau3X);
+    fscanf(fichier_charge,"%d ",&oiseau3Y);
+
+    Plateau[SnoopyX][SnoopyY] = 'S';
+    Plateau[murX][murY] = 'M';
+    Plateau[mur_cassableX][mur_cassableY] = 'C';
+    Plateau[mur_piegeX][mur_piegeY] = 'X';
+    Plateau[oiseauX][oiseauY] = 'O';
+    Plateau[oiseau1X][oiseau1Y] = 'O';
+    Plateau[oiseau2X][oiseau2Y] = 'O';
+    Plateau[oiseau3X][oiseau3Y] = 'O';
+
+    for (int i = 0; i < Longueur; ++i) {
+        for (int j = 0; j < Largeur; ++j) {
+            printf( "%c",Plateau[i][j]);
+        }
+    }
 
     // Fermer le fichier après avoir lu les données
     fclose(fichier_charge);
 
 
     // Met à jour le plateau avec les positions des éléments chargés
-    Plateau[SnoopyX][SnoopyY] = 'S';
-    Plateau[balleX][balleY] = 'B';
-    Plateau[murX][murY] = 'M';
-    Plateau[oiseauX][oiseauY] = 'O';
-    Plateau[oiseau1X][oiseau1Y] = 'O';
-    Plateau[oiseau2X][oiseau2Y] = 'O';
-    Plateau[oiseau3X][oiseau3Y] = 'O';
+
+
 }
 
