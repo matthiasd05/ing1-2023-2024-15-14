@@ -46,3 +46,15 @@ void mur(){
     }
 
 }
+
+void surprise() {
+        if(Plateau[SnoopyX][SnoopyY+1]==Plateau[bloc_surpriseX][bloc_surpriseY]){
+            Plateau[murX][murY]=' ' ;
+            //Remplace l'ancienne case par un espace vide
+            murY++;
+            //Ajoute 1 à la coordonnée en Y (ordonnée du mur)
+            Plateau[murX][murY]= 'M';
+            //Mets la lettre M sur la nouvelle case
+            droit_bouger=1;
+        }
+}

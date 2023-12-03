@@ -9,6 +9,7 @@ int balleX,balleY,balle1X,balle1Y,test_balle;
 int murX,murY;
 int mur_cassableX,mur_cassableY;
 int mur_piegeX,mur_piegeY;
+int bloc_surpriseX,bloc_surpriseY;
 int oiseauX,oiseauY,oiseau1X,oiseau1Y,oiseau2X,oiseau2Y,oiseau3X,oiseau3Y,test_oiseau,test_oiseau1,test_oiseau2,test_oiseau3;
 int compteur;
 void plateau(const char *NOMfichier){
@@ -78,7 +79,6 @@ void plateau(const char *NOMfichier){
                             printf("%c",Plateau[i][j]);
                             test_oiseau3++;
                         }
-
                     }
                     else if(caractere_lu=='M'){
                         murX = i;
@@ -100,6 +100,12 @@ void plateau(const char *NOMfichier){
                         Plateau[i][j]='X';
                         printf("%c",Plateau[i][j]);
 
+                    }
+                    else if(caractere_lu=='W'){
+                        bloc_surpriseX = i;
+                        bloc_surpriseY = j;
+                        Plateau[i][j]='W';
+                        printf("%c",Plateau[i][j]);
                     }
                     else if(caractere_lu== ' '){
                         Plateau[i][j] = ' ';

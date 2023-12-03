@@ -9,6 +9,7 @@ int balleX,balleY;
 int murX,murY;
 int mur_cassableX,mur_cassableY;
 int mur_piegeX,mur_piegeY;
+int bloc_surpriseX,bloc_surpriseY;
 int oiseauX,oiseauY,oiseau1X,oiseau1Y,oiseau2X,oiseau2Y,oiseau3X,oiseau3Y,test_oiseau,test_oiseau1,test_oiseau2,test_oiseau3;
 int compteur;
 int droit_casser;

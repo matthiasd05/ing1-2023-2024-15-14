@@ -3,7 +3,6 @@
 #include <windows.h>
 #include "fonctions.h"
 
-
 int compteur;
 int droit_pousser;
 int droit_casser;
@@ -13,6 +12,7 @@ int score_finale = 0;
 char coeur= '$';
 int temps_ecoule;
 int temps_restant =120;
+
 void barre_vie(){
     printf("\n");// Saut a la ligne
     // Affiche le nombre de vies actuelles sous la forme de symboles de dollars
@@ -30,8 +30,11 @@ void barre_vie(){
         // Décrémente le nombre de vies de 3 si Snoopy est sur la même case qu'un block piège
         vie = vie - 3;
     }
+    else if(Plateau[SnoopyX][SnoopyY]==Plateau[bloc_surpriseX][bloc_surpriseY]){
+        // Ajoute une vie si Snoopy passe sur un bloc surprise
+        vie++;
+    }
 }
-
 
 void chrono(){
     // Le temps imparti est de 120 secondes cependant nous avons divisé les secondes en 5*0.2s pour permettre une meilleure expérience de jeu
@@ -51,6 +54,7 @@ void chrono(){
     droit_chronometrer = 1;
 
 }
+
 void affichage(){
     // La fonction comme son nom l'indique permet d'afficher les éléments nécessaires à l'écran
     for (int i = 0; i < Longueur; ++i) {
@@ -74,6 +78,7 @@ void scores(){
     score_finale=score_finale+score;
 }
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
+
 void oiseau(){
     // Vérifie si Snoopy est sur la même case qu'un oiseau et si cet oiseau n'a pas encore été rencontré
     if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseauX][oiseauY] && compte_oiseau1 == 0){
@@ -191,8 +196,6 @@ void reinitialiser(){
     Plateau[oiseau3X][oiseau3Y] = 'O';
 }
 
-
-
 void boucle(const char * nomFichier){
     // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
     plateau(nomFichier);
@@ -298,6 +301,7 @@ void menu(){
                 balle();
                 mur();
                 murCassable();
+                surprise();
                 // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
                     // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -334,6 +338,7 @@ void menu(){
                  balle();
                  mur();
                  murCassable();
+                 surprise();
                  // La commande suivante va vérifier s'il y a eu une détection des touches
                  if(kbhit()){
                      // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -368,6 +373,7 @@ void menu(){
                 balle();
                 mur();
                 murCassable();
+                surprise();
                 // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
                     // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -402,6 +408,7 @@ void menu(){
                 balle();
                 mur();
                 murCassable();
+                surprise();
                 // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
                     // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -457,6 +464,7 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
+                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -491,6 +499,7 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
+                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -525,6 +534,7 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
+                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -559,6 +569,7 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
+                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
