@@ -14,6 +14,7 @@ char coeur= '$';
 int temps_ecoule;
 int temps_restant =120;
 int trouver;
+int decalage_1,decalage_2,decalage_3,decalage_4;
 void barre_vie(){
     printf("\n");// Saut a la ligne
     // Affiche le nombre de vies actuelles sous la forme de symboles de dollars
@@ -108,7 +109,7 @@ void oiseau(){
     }
 }
 
-int decalage_1,decalage_2,decalage_3,decalage_4;
+
 void balle(){
     Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
     if(Plateau[balleX+1][balleY]!='#' && decalage_1<4){
@@ -152,36 +153,19 @@ void reinitialiser(){
     compte_oiseau2 = 0;
     compte_oiseau3 = 0;
     compte_oiseau4 = 0;
+    trouver = 0;
     Plateau[SnoopyX][SnoopyY] = ' ';
     Plateau[murX][murY] = 'M';
     Plateau[balleX][balleY] = 'B';
     Plateau[mur_cassableX][mur_cassableY] = 'C';
     Plateau[mur_piegeX][mur_piegeY] = 'X';
+    Plateau[bloc_surpriseX][bloc_surpriseY] = 'W';
     Plateau[oiseauX][oiseauY] = 'O';
     Plateau[oiseau1X][oiseau1Y] = 'O';
     Plateau[oiseau2X][oiseau2Y] = 'O';
     Plateau[oiseau3X][oiseau3Y] = 'O';
 }
 
-
-
-void boucle(const char * nomFichier){
-    // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
-    plateau(nomFichier);
-    while (1){
-        system("CLS");
-        affichage();
-        oiseau();
-        balle();
-        mur();
-        murCassable();
-        if(kbhit()){
-            char commande = _getch();
-            touches(commande);
-        }
-
-    }
-}
 
 int continuer = 1;
 //On définit un menu qui va grâce à un switch permettre à l'utilisateur de faire ce qu'il veut selon ses choix

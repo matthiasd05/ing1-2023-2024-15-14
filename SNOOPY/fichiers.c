@@ -16,6 +16,24 @@ void sauvegarde(){
      */
     FILE *fichier_sauvegarde;
     fichier_sauvegarde = fopen(nomFichier, "w");
+    if(Plateau[oiseauX][oiseauY] != 'O'){
+        oiseau_trouve++;
+    }
+    else if(Plateau[oiseau1X][oiseau1Y] != 'O'){
+        oiseau_trouve1++;
+    }
+    else if(Plateau[oiseau2X][oiseau2Y] != 'O'){
+        oiseau_trouve2++;
+    }
+    else if(Plateau[oiseau3X][oiseau3Y] != 'O'){
+        oiseau_trouve3++;
+    }
+    else if(Plateau[mur_cassableX][mur_cassableY] == ' '){
+        mur_casse++;
+    }
+    else if(Plateau[bloc_surpriseX][bloc_surpriseY] == ' '){
+        mur_trouve++;
+    }
     fprintf(fichier_sauvegarde,"%d ",SnoopyX);
     fprintf(fichier_sauvegarde,"%d ",SnoopyY);
     fprintf(fichier_sauvegarde,"%d ",murX);
@@ -26,9 +44,7 @@ void sauvegarde(){
     fprintf(fichier_sauvegarde,"%d ",mur_piegeY);
     fprintf(fichier_sauvegarde,"%d ",bloc_surpriseX);
     fprintf(fichier_sauvegarde,"%d ",bloc_surpriseY);
-    fprintf(fichier_sauvegarde,"%d ",balleX);
-    fprintf(fichier_sauvegarde,"%d ",balleY);
-    fprintf(fichier_sauvegarde,"%d ",oiseauX );
+    fprintf(fichier_sauvegarde,"%d ",oiseauX);
     fprintf(fichier_sauvegarde,"%d ",oiseauY);
     fprintf(fichier_sauvegarde,"%d ",oiseau1X);
     fprintf(fichier_sauvegarde,"%d ",oiseau1Y);
@@ -36,24 +52,8 @@ void sauvegarde(){
     fprintf(fichier_sauvegarde,"%d ",oiseau2Y);
     fprintf(fichier_sauvegarde,"%d ",oiseau3X);
     fprintf(fichier_sauvegarde,"%d ",oiseau3Y);
-    if(Plateau[oiseauX][oiseauY] == ' '){
-        oiseau_trouve++;
-    }
-    else if(Plateau[oiseauX][oiseauY] == ' '){
-        oiseau_trouve1++;
-    }
-    else if(Plateau[oiseauX][oiseauY] == ' '){
-        oiseau_trouve2++;
-    }
-    else if(Plateau[oiseauX][oiseauY] == ' '){
-        oiseau_trouve3++;
-    }
-    else if(Plateau[mur_cassableX][mur_cassableY] == ' '){
-        mur_casse++;
-    }
-    else if(Plateau[bloc_surpriseX][bloc_surpriseY] == ' '){
-        mur_trouve++;
-    }
+    fprintf(fichier_sauvegarde,"%d ",balleX);
+    fprintf(fichier_sauvegarde,"%d ",balleY);
     // Cela va donc écrire les positions actuelles des éléments dans le fichier puis le fermer
 
     // Ferme le fichier après avoir écrit les informations
@@ -89,26 +89,25 @@ void chargerPartie(const char *nomFichier) {
     fscanf(fichier_charge,"%d ",&oiseau3X);
     fscanf(fichier_charge,"%d ",&oiseau3Y);
 
-
     Plateau[SnoopyX][SnoopyY] = 'S';
     Plateau[murX][murY] = 'M';
     Plateau[mur_piegeX][mur_piegeY] = 'X';
-    if(oiseau_trouve == 1){
+    if(oiseau_trouve == 1 ){
         Plateau[oiseauX][oiseauY] = ' ';
     }
-    else if(oiseau_trouve == 0){
+    else if(oiseau_trouve == 0 ){
         Plateau[oiseauX][oiseauY] = 'O';
     }
-    if(oiseau_trouve == 1){
+    if(oiseau_trouve1 == 1){
         Plateau[oiseau1X][oiseau1Y] = ' ';
     }
-    else if(oiseau_trouve == 0){
+    else if(oiseau_trouve1 == 0 ){
         Plateau[oiseau1X][oiseau1Y] = 'O';
     }
-    if(oiseau_trouve == 1){
+    if(oiseau_trouve2 == 1){
         Plateau[oiseau2X][oiseau2Y] = ' ';
     }
-    else if(oiseau_trouve2 == 0){
+    else if(oiseau_trouve2 == 0 ){
         Plateau[oiseau2X][oiseau2Y] = 'O';
     }
     if(oiseau_trouve3 == 1){
@@ -126,15 +125,21 @@ void chargerPartie(const char *nomFichier) {
     if(mur_trouve == 1){
         Plateau[bloc_surpriseX][bloc_surpriseY] = ' ';
     }
-    else if(mur_trouve == 0){
+    else if(bloc_surpriseY == 0 && bloc_surpriseX ==0){
+        Plateau[bloc_surpriseX][bloc_surpriseY] = '#';
+    }
+    else if(mur_trouve == 0 && SnoopyY != 0 && SnoopyX!=0){
         Plateau[bloc_surpriseX][bloc_surpriseY] = 'W';
     }
-
+    for (int j = 0; j < Largeur; ++j) {
+        Plateau[0][j] = '#';
+    }
 
     for (int i = 0; i < Longueur; ++i) {
         for (int j = 0; j < Largeur; ++j) {
             printf( "%c",Plateau[i][j]);
         }
+        printf("\n");
     }
 
     // Fermer le fichier après avoir lu les données
@@ -142,7 +147,6 @@ void chargerPartie(const char *nomFichier) {
 
 
     // Met à jour le plateau avec les positions des éléments chargés
-
 
 }
 

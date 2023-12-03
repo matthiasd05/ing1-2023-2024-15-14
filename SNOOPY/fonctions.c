@@ -14,7 +14,7 @@ int compteur;
 int droit_casser;
 int droit_bouger=1;
 int droit_pousser;
-
+int decalage_1,decalage_2,decalage_3,decalage_4;
 void touches(char commande){
         // La fonction s'occupe des déplacements, elle est appelée suite à la fnction getch qui détete l'appui du touche et permet donc les différents déplacements
         switch (commande) {
