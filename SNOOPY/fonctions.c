@@ -9,7 +9,6 @@ int balleX,balleY;
 int murX,murY;
 int mur_cassableX,mur_cassableY;
 int mur_piegeX,mur_piegeY;
-int bloc_surpriseX,bloc_surpriseY;
 int oiseauX,oiseauY,oiseau1X,oiseau1Y,oiseau2X,oiseau2Y,oiseau3X,oiseau3Y,test_oiseau,test_oiseau1,test_oiseau2,test_oiseau3;
 int compteur;
 int droit_casser;
@@ -40,7 +39,7 @@ void touches(char commande){
             }
             case 'f':{
                 if(SnoopyX+1<Longueur-1){
-                    if(droit_pousser>=1 &&Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
+                    if(droit_pousser>=1 && Plateau[SnoopyX+1][SnoopyY]==Plateau[murX][murY]){
                         Plateau[SnoopyX][SnoopyY] = 'S';
                     }
                     else if(droit_casser==0 && Plateau[SnoopyX+1][SnoopyY]==Plateau[mur_cassableX][mur_cassableY]){
@@ -52,6 +51,7 @@ void touches(char commande){
                         Plateau[SnoopyX][SnoopyY] = 'S';
                     }
                 }
+
                 break;
             }
             case 'd':{

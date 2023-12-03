@@ -3,6 +3,7 @@
 #include <windows.h>
 #include "fonctions.h"
 
+
 int compteur;
 int droit_pousser;
 int droit_casser;
@@ -12,7 +13,7 @@ int score_finale = 0;
 char coeur= '$';
 int temps_ecoule;
 int temps_restant =120;
-
+int trouver;
 void barre_vie(){
     printf("\n");// Saut a la ligne
     // Affiche le nombre de vies actuelles sous la forme de symboles de dollars
@@ -30,11 +31,13 @@ void barre_vie(){
         // Décrémente le nombre de vies de 3 si Snoopy est sur la même case qu'un block piège
         vie = vie - 3;
     }
-    else if(Plateau[SnoopyX][SnoopyY]==Plateau[bloc_surpriseX][bloc_surpriseY]){
+    else if(Plateau[SnoopyX][SnoopyY]==Plateau[bloc_surpriseX][bloc_surpriseY] && trouver == 0){
         // Ajoute une vie si Snoopy passe sur un bloc surprise
         vie++;
+        trouver++;
     }
 }
+
 
 void chrono(){
     // Le temps imparti est de 120 secondes cependant nous avons divisé les secondes en 5*0.2s pour permettre une meilleure expérience de jeu
@@ -54,7 +57,6 @@ void chrono(){
     droit_chronometrer = 1;
 
 }
-
 void affichage(){
     // La fonction comme son nom l'indique permet d'afficher les éléments nécessaires à l'écran
     for (int i = 0; i < Longueur; ++i) {
@@ -78,7 +80,6 @@ void scores(){
     score_finale=score_finale+score;
 }
 int compte_oiseau1,compte_oiseau2,compte_oiseau3,compte_oiseau4;
-
 void oiseau(){
     // Vérifie si Snoopy est sur la même case qu'un oiseau et si cet oiseau n'a pas encore été rencontré
     if(Plateau[SnoopyX][SnoopyY] == Plateau[oiseauX][oiseauY] && compte_oiseau1 == 0){
@@ -108,7 +109,6 @@ void oiseau(){
 }
 
 int decalage_1,decalage_2,decalage_3,decalage_4;
-
 void balle(){
     Plateau[balleX][balleY] = ' '; // Effacer la position actuelle de la balle
     if(Plateau[balleX+1][balleY]!='#' && decalage_1<4){
@@ -143,40 +143,7 @@ void balle(){
     }
 
 }
-void balle2 (){
-    Plateau[balle1X][balle1Y] = ' '; // Effacer la position actuelle de la balle
-    if(Plateau[balle1X+1][balle1Y]!='#' && decalage_1<2){
-        balle1X++; //Faire en sorte que la balle se déplace en incrémentant ses coordonnées
-        balle1Y++;
-        Plateau[balle1X][balle1Y] ='B'; //Remplacer l'espace vide de la nouvelle case par un B qui symbolise la balle
-        decalage_1++;
-    }
-    else if(Plateau[balle1X][balle1Y+1]!='#'&& decalage_2<2){
-        balle1X--;
-        balle1Y++;
-        Plateau[balle1X][balle1Y] ='B';
-        decalage_2++;
-    }
-    else if(Plateau[balle1X-1][balle1Y]!='#'&& decalage_3<2){
-        balle1X--;
-        balle1Y--;
-        Plateau[balle1X][balle1Y] ='B';
-        decalage_3++;
-    }
-    else if(Plateau[balle1X][balle1Y-1]!='#'&& decalage_4<2){
-        balle1X++;
-        balle1Y--;
-        Plateau[balle1X][balle1Y] ='B';
-        decalage_4++;
-    }
-    else{
-        decalage_1=0;
-        decalage_2=0;
-        decalage_3=0;
-        decalage_4=0;
-    }
 
-}
 void reinitialiser(){
     droit_bouger=0;
     droit_pousser = 0;
@@ -195,6 +162,8 @@ void reinitialiser(){
     Plateau[oiseau2X][oiseau2Y] = 'O';
     Plateau[oiseau3X][oiseau3Y] = 'O';
 }
+
+
 
 void boucle(const char * nomFichier){
     // La boucle est ici utilisée seulement pour les tests autre que lorsque l'on appuie sur 2
@@ -301,7 +270,6 @@ void menu(){
                 balle();
                 mur();
                 murCassable();
-                surprise();
                 // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
                     // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -325,11 +293,13 @@ void menu(){
 
             }
                 //On indique à l'utilisateur qu'il a fini le niveau en lui annoçant son score puis par la suite, il accédera au niveau 2
-                printf("Bravo vous avez reussi le niveau !!\n");
-                scores();
-                Sleep(1000);
-                reinitialiser();
-                plateau ("niveau2.txt");
+                if(vie>0){
+                    printf("Bravo vous avez reussi le niveau !!\n");
+                    scores();
+                    Sleep(1000);
+                    reinitialiser();
+                }
+                plateau("niveau2.txt");
                 while(vie>0&& compteur<8){
                  system("CLS");
                  affichage();
@@ -338,7 +308,6 @@ void menu(){
                  balle();
                  mur();
                  murCassable();
-                 surprise();
                  // La commande suivante va vérifier s'il y a eu une détection des touches
                  if(kbhit()){
                      // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -360,11 +329,15 @@ void menu(){
                      touches(commande);
                  }
             }
-                printf("Bravo vous avez reussi le niveau !!\n");
-                scores();
-                Sleep(1000);
-                reinitialiser();
-                plateau("niveau3.txt");
+                if(vie>0){
+                    printf("Bravo vous avez reussi le niveau !!\n");
+                    scores();
+                    Sleep(1000);
+                    reinitialiser();
+
+                }
+            plateau("niveau3.txt");
+
             while(vie>0&& compteur<12){
                 system("CLS");
                 affichage();
@@ -373,7 +346,6 @@ void menu(){
                 balle();
                 mur();
                 murCassable();
-                surprise();
                 // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
                     // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -395,11 +367,14 @@ void menu(){
                     touches(commande);
                 }
             }
-            printf("Bravo vous avez reussi le niveau !!\n");
-            scores();
-            Sleep(1000);
-            reinitialiser();
-            plateau("niveau4.txt");
+            if(vie>0){
+                printf("Bravo vous avez reussi le niveau !!\n");
+                scores();
+                Sleep(1000);
+                reinitialiser();
+                plateau("niveau4.txt");
+            }
+
             while(vie>0&& compteur<16){
                 system("CLS");
                 affichage();
@@ -408,7 +383,6 @@ void menu(){
                 balle();
                 mur();
                 murCassable();
-                surprise();
                 // La commande suivante va vérifier s'il y a eu une détection des touches
                 if(kbhit()){
                     // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -433,14 +407,18 @@ void menu(){
             if (compteur == 16){
                 printf("\nBRAVO VOUS AVEZ FINI LE JEU ");
                 Sleep(5000);
+                reinitialiser();
+                compteur = 0;
                 menu();
             }
+
             if (vie<=0 ){
                 // Ici, on indique à l'utilisateur qu'il a perdu, on le renvoit au menu et on réinitialise tout s'il veut recommencer une partie
                 printf("\n\nGAME OVER\n\n");
                 Sleep(500);
                 vie = 3;
                 reinitialiser();
+                compteur = 0;
                 menu();
             }
             continuer = 1;
@@ -464,7 +442,6 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
-                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -499,7 +476,6 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
-                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -534,7 +510,6 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
-                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -569,7 +544,6 @@ void menu(){
                     balle();
                     mur();
                     murCassable();
-                    surprise();
                     // La commande suivante va vérifier s'il y a eu une détection des touches
                     if(kbhit()){
                         // S'il y a eu une touche, alors on va récupérer ce à quoi elle correspond puis après utiliser nos fonctions déjà définis permettant de bouger, la pause ou encore la sauvegarde
@@ -593,8 +567,6 @@ void menu(){
 
                 }
             }
-
-
             break;
 
         }

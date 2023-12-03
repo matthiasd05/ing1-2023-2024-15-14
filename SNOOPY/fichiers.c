@@ -25,11 +25,9 @@ void sauvegarde(){
     fprintf(fichier_sauvegarde,"%d ",mur_cassableY);
     fprintf(fichier_sauvegarde,"%d ",mur_piegeX);
     fprintf(fichier_sauvegarde,"%d ",mur_piegeY);
-    fprintf(fichier_sauvegarde,"%d",bloc_surpriseX);
-    fprintf(fichier_sauvegarde,"%d",bloc_surpriseY);
     fprintf(fichier_sauvegarde,"%d ",balleX);
     fprintf(fichier_sauvegarde,"%d ",balleY);
-    fprintf(fichier_sauvegarde,"%d ",oiseauX);
+    fprintf(fichier_sauvegarde,"%d ",oiseauX );
     fprintf(fichier_sauvegarde,"%d ",oiseauY);
     fprintf(fichier_sauvegarde,"%d ",oiseau1X);
     fprintf(fichier_sauvegarde,"%d ",oiseau1Y);
@@ -62,9 +60,6 @@ void chargerPartie(const char *nomFichier) {
     fscanf(fichier_charge,"%d ",&mur_cassableY);
     fscanf(fichier_charge,"%d ",&mur_piegeX);
     fscanf(fichier_charge,"%d ",&mur_piegeY);
-    fscanf(fichier_charge,"%d",&bloc_surpriseX);
-    fscanf(fichier_charge,"%d",&bloc_surpriseY);
-
     fscanf(fichier_charge,"%d ",&oiseauX);
     fscanf(fichier_charge,"%d ",&oiseauY);
     fscanf(fichier_charge,"%d ",&oiseau1X);
@@ -74,15 +69,12 @@ void chargerPartie(const char *nomFichier) {
     fscanf(fichier_charge,"%d ",&oiseau3X);
     fscanf(fichier_charge,"%d ",&oiseau3Y);
 
+
     Plateau[SnoopyX][SnoopyY] = 'S';
     Plateau[murX][murY] = 'M';
     Plateau[mur_cassableX][mur_cassableY] = 'C';
     Plateau[mur_piegeX][mur_piegeY] = 'X';
-    Plateau[bloc_surpriseX][bloc_surpriseY] = 'W';
-    Plateau[oiseauX][oiseauY] = 'O';
-    Plateau[oiseau1X][oiseau1Y] = 'O';
-    Plateau[oiseau2X][oiseau2Y] = 'O';
-    Plateau[oiseau3X][oiseau3Y] = 'O';
+
 
     for (int i = 0; i < Longueur; ++i) {
         for (int j = 0; j < Largeur; ++j) {

@@ -6,5 +6,5 @@
 #     MM MMMMMMMMM #
 #    C             #
 # MM M    S        #
-#O            B   O#
+#O                O#
 #################### 
